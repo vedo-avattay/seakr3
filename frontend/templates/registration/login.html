@@ -1,0 +1,65 @@
+{% load static %}
+<!doctype html>
+
+    <head>
+        <title>Seaker</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+        <link rel="stylesheet" href="{% static 'seakerUI/css/seaker.css' %}"/>
+        <link rel="stylesheet" href="{% static 'seakerUI/css/bootstrap.min.css' %}"/>
+        <link rel="stylesheet" href="{% static 'seakerUI/fontawesome-free-5.8.1-web/css/all.css' %}"/>
+        <link rel="stylesheet" href="{% static 'seakerUI/bootstrap-datepicker-1.6.4/css/bootstrap-datepicker.css' %}"/>
+        <link rel="stylesheet" href="{% static 'seakerUI/bootstrap-select-1.13.7/dist/css/bootstrap-select.css' %}"/>
+        <link rel="stylesheet" href="{% static 'seakerUI/css/tempusdominus-bootstrap-4.min.css' %}"/>
+        <script src="{% static 'seakerUI/js/jquery-3.3.1.min.js' %}"></script>
+        <script src="{% static 'seakerUI/js/popper.min.js' %}"></script>
+        <script src="{% static 'seakerUI/js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'seakerUI/bootstrap-datepicker-1.6.4/js/bootstrap-datepicker.min.js' %}"></script>
+        <script src="{% static 'seakerUI/bootstrap-select-1.13.7/dist/js/bootstrap-select.min.js' %}"></script>
+        <script src="{% static 'seakerUI/js/moment.js' %}"></script>
+        <script src="{% static 'seakerUI/js/tempusdominus-bootstrap-4.min.js' %}"></script>
+    </head>
+
+<br />
+<br />
+<br />
+
+<div class="container">
+
+
+
+
+  <div class="card mx-auto" style="width:40%;">
+ 
+         
+
+          <h4 class='card-header'>Welcome to Seaker</h4>
+
+          <!-- Need a black seaker logo
+            <div class="card-header">
+             <img src="{% static 'seakerUI/images/seaker_small.png' %}" alt="Seaker">
+         </div> -->
+ 
+         <div class="card-body">
+ 
+                 <form method="POST">
+ 
+                         {% csrf_token %}
+                         
+                         {{ form.as_p }}
+                         
+                         <button class="btn btn-primary" type="submit" style="margin-left:15px;">Login</button><a href="/accounts/password_reset" class="btn btn-link">Forgot Password</a>
+                         
+                         </form>
+                         
+         
+ 
+         </div>
+ 
+     </div>
+ 
+ 
+ </div>
+ 
+

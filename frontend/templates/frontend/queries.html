@@ -1,0 +1,1192 @@
+{% extends "frontend/navbar.html" %}
+{% block content %}
+
+{% if user.is_authenticated %}
+    <div>
+        {% if proc_results != "None" %}
+        <table>
+           <textarea class="form-control" rows="5" id="proc_results" style="min-width: 100%">{{ proc_results }}</textarea>
+        </table>
+        {% endif %}
+        <table class="table">
+             {% if query_flag == "None" %}
+            <thead>
+                <th>User Name </th>
+                <th>Query Name</th>
+                <th>Query Description</th>
+                <th>Created</th>
+                <th>Updated</th>
+                <th>Group</th>
+                <th><a href="/ui/newqueries" class="btn btn-success btn-sm">New Query</a>
+                </th>
+            </thead>
+            {% endif %}
+            <tbody>
+                {% for query in query_list %}
+                  {% if user.username == query.user_name %}
+                    <tr>
+                      <td>{{query.user_name}}</td>
+                      <td>{{query.query_name}}</td>
+                      <td>{{query.query_description}}</td>
+                      <td>{{query.created}}</td>
+                      <td>{{query.updated}}</td>
+                      <td>{{query.groups}}</td>
+                      <td>
+                        <!-- <button type="button" class="btn btn-primary btn-sm"><i class="far fa-play-circle"></i> Run</button> -->
+                        <!-- <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#scheduleModal"><i class="fa fa-calendar-alt"></i> Schedule</button> -->
+                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#Clone"><i class="fa fa-copy"></i> Clone</button>
+                          <div id="Clone" class="modal fade" role="dialog">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <form method="post" id="CloneQueryForm" action="/ui/clonequeries/{{ query.id }}">
+                                 <div class="modal-header">
+                                   <h4 class="modal-title">Clone Query</h4>
+                                   <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                 </div>
+                                 <div class="modal-body">
+                                     {% csrf_token %}
+                                     <input type="text" class="form-control" name="cloned_query_name" id="cloned_query_name"
+                                       placeholder="New Name" required>
+                                     <input type="hidden" name="currentqueryname" value="{{ query.query_name }}">
+                                 </div>
+                                 <div class="modal-footer">
+                                     <button type="submit" class="submit-btn btn-default">Save</button>
+                                 </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        <a href="/ui/editqueries/{{ query.id }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit</a>
+                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#Delete"><i class="fa fa-trash-alt"></i> Delete</button>
+                          <div id="Delete" class="modal fade" role="dialog">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <form method="post" id="DeleteQueryForm" action="/ui/deletequeries/{{ query.id }}">
+                                 <div class="modal-header">
+                                   <h4 class="modal-title">Delete Query?</h4>
+                                   <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                 </div>
+                                 <div class="modal-body">
+                                     {% csrf_token %}
+                                     <input type="text" class="form-control" name="delete_answer" id="delete_answer"
+                                       placeholder="Yes or No?" required>
+                                 </div>
+                                 <div class="modal-footer">
+                                     <button type="submit" class="submit-btn btn-default">Save</button>
+                                 </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                      </td>
+                    </tr>
+                  {% elif query.groups != 'None' %}
+                     {% for group in querygroups %}
+                        {% if group.group_name == query.groups %}
+                           {% if user.username in group.display_members %}
+                             <tr>
+                                <td>{{query.user_name}}</td>
+                                <td>{{query.query_name}}</td>
+                                <td>{{query.query_description}}</td>
+                                <td>{{query.created}}</td>
+                                <td>{{query.updated}}</td>
+                                <td>{{query.groups}}</td>
+                                <td>
+                                  <!-- <button type="button" class="btn btn-primary btn-sm"><i class="far fa-play-circle"></i> Run</button> -->
+                                  <!-- <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#scheduleModal"><i class="fa fa-calendar-alt"></i> Schedule</button> -->
+                                  <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#Clone"><i class="fa fa-copy"></i> Clone</button>
+                                    <div id="Clone2" class="modal fade" role="dialog">
+                                      <div class="modal-dialog">
+                                        <div class="modal-content">
+                                          <form method="post" id="CloneQueryForm2" action="/ui/clonequeries/{{ query.id }}">
+                                            <div class="modal-header">
+                                              <h4 class="modal-title">Clone Query</h4>
+                                              <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            </div>
+                                            <div class="modal-body">
+                                              {% csrf_token %}
+                                              <input type="text" class="form-control" name="cloned_query_name" id="cloned_query_name"
+                                                     placeholder="New Name" required>
+                                              <input type="hidden" name="currentqueryname" value="{{ query.query_name }}">
+                                            </div>
+                                            <div class="modal-footer">
+                                              <button type="submit" class="submit-btn btn-default">Save</button>
+                                            </div>
+                                          </form>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  <a href="/ui/editqueries/{{ query.id }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit</a>
+                                  <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#Delete2"><i class="fa fa-trash-alt"></i> Delete</button>
+                                    <div id="Delete2" class="modal fade" role="dialog">
+                                      <div class="modal-dialog">
+                                        <div class="modal-content">
+                                          <form method="post" id="DeleteQueryForm2" action="/ui/deletequeries/{{ query.id }}">
+                                            <div class="modal-header">
+                                              <h4 class="modal-title">Delete Query?</h4>
+                                              <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            </div>
+                                            <div class="modal-body">
+                                              {% csrf_token %}
+                                              <input type="text" class="form-control" name="delete_answer" id="delete_answer"
+                                                     placeholder="Yes or No?" required>
+                                            </div>
+                                            <div class="modal-footer">
+                                              <button type="submit" class="submit-btn btn-default">Save</button>
+                                            </div>
+                                          </form>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </td>
+                             </tr>
+                           {% endif %}
+                        {% endif %}
+                     {% endfor %}
+                  {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% if not query_flag == "None" %}
+    <div>
+        {% if query_flag == "New" %}
+          <form method="post" id="querysForm" action="/ui/newqueries/">
+            <h3><left>New Query</left>&nbsp;
+                <a href="/ui/queries" class="btn btn-secondary btn-sm">Cancel</a>&nbsp;&nbsp;
+                <button type="submit" class="btn btn-success btn-sm" onclick="return validateForm(event);">Save</button>
+            </h3>
+        {% elif query_flag == "Edit" %}
+          <form method="post" id="querysForm" action="/ui/editqueries/{{ query_id }}">
+            <h3><left>Edit Query</left>&nbsp;
+                <a href="/ui/queries" class="btn btn-secondary btn-sm">Cancel</a>&nbsp;&nbsp;
+                <button type="submit" class="btn btn-success btn-sm" onclick="return validateForm(event);">Save</button>
+            </h3>
+        {% else %}
+          <form method="post" id="querysForm" action="/ui/clonequeries/{{ query_id }}">
+            <h3><left>Clone Query</left>&nbsp;
+                <a href="/ui/queries" class="btn btn-secondary btn-sm">Cancel</a>&nbsp;&nbsp;
+                <button type="submit" class="btn btn-success btn-sm">Save</button>
+            </h3>
+        {% endif %}
+            {% csrf_token %}
+                <script type="text/javascript">
+                    $(function() {
+                      $("#datetimepicker1" ).datetimepicker({
+                          icons: {
+                                  time: 'far fa-clock',
+                                  date: 'far fa-calendar',
+                                  up: 'fas fa-arrow-up',
+                                  down: 'fas fa-arrow-down',
+                                  previous: 'fas fa-chevron-left',
+                                  next: 'far fa-chevron-right',
+                                  today: 'far fa-calendar-check-o',
+                                  clear: 'far fa-trash',
+                                  close: 'far fa-times'
+                          },
+                          format: 'MM/DD/YYYY HH:mm'
+                      });
+                    });
+                </script>
+                <script>
+                    $(function() {
+                      $("#datetimepicker2" ).datetimepicker({
+                          icons: {
+                                  time: 'far fa-clock',
+                                  date: 'far fa-calendar',
+                                  up: 'fas fa-arrow-up',
+                                  down: 'fas fa-arrow-down',
+                                  previous: 'fas fa-chevron-left',
+                                  next: 'far fa-chevron-right',
+                                  today: 'far fa-calendar-check-o',
+                                  clear: 'far fa-trash',
+                                  close: 'far fa-times'
+                          },
+                          format: 'MM/DD/YYYY HH:mm'
+                      });
+                    });
+                </script>
+                <script>
+                    function setQueryType (typeValue, theEvent){
+                      // alert("typeValue=" + typeValue);
+                      document.getElementById("query_type").value = typeValue;
+                      validateForm(theEvent);
+                    }
+                </script>
+                <script>
+                    function checkUncheckAll (type) {
+                      cboxStat = document.getElementById("cboxStatus").value;
+                      checkedBoxes = document.body.getElementsByTagName("*");
+                      for (var i=0; i < checkedBoxes.length; i++) {
+                          if (checkedBoxes[i].type == 'checkbox') {
+                             if (cboxStat == '0') {
+                                checkedBoxes[i].checked = true;
+                             }
+                             else {
+                                checkedBoxes[i].checked = false;
+                             }
+                          }
+                      }
+                      if (cboxStat == '0') {
+                         document.getElementById("cboxStatus").value = 1;
+                      }
+                      else {
+                         document.getElementById("cboxStatus").value = 0;
+                      }
+                    }
+                </script>
+                <script>
+                    function setButtonState(buttonName) {
+                      // alert("checkbox: " + buttonName);
+                      var bName = buttonName + "_button";
+                      if (document.getElementById(buttonName).checked) {
+                        document.getElementById(bName).disabled = false;
+                        // alert("buttonName: " + buttonName + " CHECKED!");
+                      }
+                      else {
+                        // alert("buttonName: " + buttonName + " UNchecked!");
+                        document.getElementById(bName).disabled = true;
+                      }
+                    }
+                </script>
+                <script>
+                    function setCheckBoxState(searchValue) {
+                      checkedBoxes = document.body.getElementsByTagName("*");
+                      for (var i=0; i < checkedBoxes.length; i++) {
+                        if (checkedBoxes[i].type == 'checkbox') {
+                           var bName = checkedBoxes[i].id;
+                           var bOn = bName + "_button_on";
+                           var bOff = bName + "_button_off";
+                           if (searchValue == "I") {
+                             // turn ON all checkboxes & buttons related to IP
+                             // turn OFF all checkboxes & buttons related to Hostname
+                             if (bName != "attack_bars"  &&
+                                 bName != "botnet_controllers" &&
+                                 bName != "routing_history" &&
+                                 bName != "routing_snapshot" &&
+                                 bName != "pdns_nxdomain" &&
+                                 bName != "nmap" &&
+                                 bName != "banners" &&
+                                 bName != "dns_queries" &&
+                                 bName != "traffic_urls" &&
+                                 bName != "pdns" &&
+                                 bName != "pdns_other" &&
+                                 bName != "host_x509" &&
+                                 bName != "attack_commands" &&
+                                 bName != "misc_antipaste" &&
+                                 bName != "misc_spam_domains" &&
+                                 bName != "domains_search" &&
+                                 bName != "ips_search") {
+                                document.getElementById(bName).style = "display:inline";
+                                document.getElementById(bName).checked = false;
+                                document.getElementById(bOn).disabled = false;
+                                document.getElementById(bOn).style = "display:inline";
+                                document.getElementById(bOff).style = "display:none";
+                             }
+                             else {
+                                if (bName == "misc_antipaste"||
+                                    bName == "misc_spam_domains" ||
+                                    bName == "domains_search" ||
+                                    bName == "ips_search") {
+                                   document.getElementById(bName).style = "display:none";
+                                   document.getElementById(bName).checked = false;
+                                   document.getElementById(bOn).disabled = true;
+                                   document.getElementById(bOn).style = "display:none";
+                                   document.getElementById(bOff).style = "display:inline";
+                                }
+                             }
+                           }
+                           else {
+                              // turn ON all checkboxes & buttons related to Hostname
+                              // turn OFF all checkboxes & buttons related to IP
+                              if (bName != "attack_bars" &&
+                                  bName != "botnet_controllers" &&
+                                  bName != "routing_history" &&
+                                  bName != "routing_snapshot" &&
+                                  bName != "pdns_nxdomain" &&
+                                  bName != "nmap" &&
+                                  bName != "banners" &&
+                                  bName != "dns_queries" &&
+                                  bName != "traffic_urls" &&
+                                  bName != "pdns" &&
+                                  bName != "pdns_other" &&
+                                  bName != "host_x509" &&
+                                  bName != "attack_commands" &&
+                                  bName != "misc_antipaste" &&
+                                  bName != "misc_spam_domains" &&
+                                  bName != "domains_search" &&
+                                  bName != "ips_search") {
+                                 document.getElementById(bName).style = "display:none";
+                                 document.getElementById(bName).checked = false;
+                                 document.getElementById(bOn).disabled = true;
+                                 document.getElementById(bOn).style = "display:none";
+                                 document.getElementById(bOff).style = "display:inline";
+                              }
+                              else {
+                                 if (bName == "misc_antipaste" ||
+                                     bName == "misc_spam_domains" ||
+                                     bName == "domains_search" ||
+                                     bName == "ips_search") {
+                                    document.getElementById(bName).style = "display:inline";
+                                    document.getElementById(bName).checked = false;
+                                    document.getElementById(bOn).disabled = false;
+                                    document.getElementById(bOn).style = "display:inline";
+                                    document.getElementById(bOff).style = "display:none";
+                                 }
+                             }
+
+                           }
+                        }
+                      }
+                      if (searchValue == "I") {
+                        document.getElementById("opt_radio_hidden").value = "I";
+                      }
+                      else {
+                        document.getElementById("opt_radio_hidden").value = "H";
+                      }
+                    }
+                </script>
+                <script>
+                    function setAllButtonStates() {
+                      checkedBoxes = document.body.getElementsByTagName("*");
+                      var opt_radio = document.getElementById("opt_radio_hidden").value;
+                      // alert("opt_radio= " + opt_radio);
+                      for (var i=0; i < checkedBoxes.length; i++) {
+                          if (checkedBoxes[i].type == 'checkbox') {
+                             var bName = checkedBoxes[i].id;
+                             var bOn = bName + "_button_on";
+                             var bOff = bName + "_button_off";
+                             // alert("bName=" + bName);
+                             if (checkedBoxes[i].checked) {
+                                // alert("checkedBoxes is CHECKED..");
+                                document.getElementById(bName).disabled = false;
+                                document.getElementById(bName).style = "display:inline";
+                                document.getElementById(bOn).disabled = false;
+                                document.getElementById(bOn).style = "display:inline";
+                                if (bName != "attack_bars" &&
+                                    bName != "botnet_controllers" &&
+                                    bName != "routing_history" &&
+                                    bName != "routing_snapshot" &&
+                                    bName != "pdns_nxdomain" &&
+                                    bName != "nmap" &&
+                                    bName != "banners" &&
+                                    bName != "dns_queries" &&
+                                    bName != "traffic_urls" &&
+                                    bName != "pdns" &&
+                                    bName != "pdns_other" &&
+                                    bName != "host_x509" &&
+                                    bName != "attack_commands") {
+                                      document.getElementById(bOff).disabled = true;
+                                      document.getElementById(bOff).style = "display:none";
+                                }
+                             }
+                             else {
+                               // alert("NOT checked..");
+                               if (opt_radio == 'H') {
+                                 // turn ON Hostname related fields
+                                 // turn OFF IP related fields
+                                 if (bName == "attack_bars" ||
+                                     bName == "botnet_controllers" ||
+                                     bName == "routing_history" ||
+                                     bName == "routing_snapshot" ||
+                                     bName == "pdns_nxdomain" ||
+                                     bName == "nmap" ||
+                                     bName == "banners" ||
+                                     bName == "dns_queries" ||
+                                     bName == "traffic_urls" ||
+                                     bName == "pdns" ||
+                                     bName == "pdns_other" ||
+                                     bName == "host_x509" ||
+                                     bName == "attack_commands" ||
+                                     bName == "misc_antipaste" ||
+                                     bName == "misc_spam_domains" ||
+                                     bName == "domains_search" ||
+                                     bName == "ips_search") {
+                                      // Hostname fields and some are BOTH
+                                      document.getElementById(bName).style = "display:inline";
+                                      document.getElementById(bOn).disabled = false;
+                                      document.getElementById(bOn).style = "display:inline";
+                                      document.getElementById(bOff).style = "display:none";
+                                 }
+                                 else {
+                                      // everything else is IP fields ONLY
+                                      document.getElementById(bName).style = "display:none";
+                                      document.getElementById(bOn).disabled = true;
+                                      document.getElementById(bOn).style = "display:none";
+                                      document.getElementById(bOff).style = "display:inline";
+                                 }
+                               }
+                               else {
+                                 // turn OFF Hostname related fields
+                                 // turn ON IP related fields
+                                 // there are only 4 fields that relate ONLY to Hostname
+                                 // all others do BOTH
+                                 if (bName == "misc_antipaste" ||
+                                     bName == "misc_spam_domains" ||
+                                     bName == "domains_search" ||
+                                     bName == "ips_search") {
+                                      // Hostname fields ONLY
+                                      document.getElementById(bName).style = "display:none";
+                                      document.getElementById(bOn).disabled = true;
+                                      document.getElementById(bOn).style = "display:none";
+                                      document.getElementById(bOff).style = "display:inline";
+                                 }
+                                 else {
+                                      // everything else is IP fields
+                                      document.getElementById(bName).style = "display:inline";
+                                      document.getElementById(bOn).disabled = false;
+                                      document.getElementById(bOn).style = "display:inline";
+                                      document.getElementById(bOff).style = "display:none";
+                                 }
+                               }
+                             }
+                          }
+                      }
+                    }
+                </script>
+                <script>
+                    function validateForm(theEvent) {
+                       // there is only 1 field that matters IF set
+                       var theOption = document.getElementById("opt_radio_hidden").value;
+                       if (theOption == "I") {
+                         // the search value MUST be a valid IP
+                         var theIP = document.getElementById("search").value;
+                         // does the IP actually have 3 "dots"?
+                         var octSetCount = theIP.split(".").length-1;
+                         var validIP = 1;
+                         var errMsg = theIP + " is INVALID. ";
+                         if (octSetCount == 3) {
+                           octSets = theIP.split(".");
+                           octSet1 = octSets[0];
+                           octSet2 = octSets[1];
+                           octSet3 = octSets[2];
+                           octSet4 = octSets[3];
+                           if (isNaN(octSet1)) {
+                             validIP = 0;
+                             errMsg += "'" + octSet1 + "' is NOT a Number.";
+                           }
+                           else if (isNaN(octSet2)) {
+                             validIP = 0;
+                             errMsg += "'" + octSet2 + "' is NOT a Number.";
+                           }
+                           else if (isNaN(octSet3)) {
+                             validIP = 0;
+                             errMsg += "'" + octSet3 + "' is NOT a Number.";
+                           }
+                           else if (isNaN(octSet4)) {
+                             validIP = 0;
+                             errMsg += "'" + octSet4 + "' is NOT a Number.";
+                           }
+                           if (validIP == 1) {
+                             var os1Num = parseInt(octSet1);
+                             var os2Num = parseInt(octSet2);
+                             var os3Num = parseInt(octSet3);
+                             var os4Num = parseInt(octSet4);
+                             if (os1Num < 0 || os1Num > 255) {
+                               validIP = 0;
+                               errMsg += "'" + octSet1 + "' must be >0 and < 256";
+                             }
+                             if (os2Num < 0 || os2Num > 255) {
+                               validIP = 0;
+                               errMsg += "'" + octSet2 + "' must be >0 and < 256";
+                             }
+                             if (os3Num < 0 || os3Num > 255) {
+                               validIP = 0;
+                               errMsg += "'" + octSet3 + "' must be >0 and < 256";
+                             }
+                             if (os4Num < 0 || os4Num > 255) {
+                               validIP += 0;
+                               errMsg = "'" + octSet4 + "' must be >0 and < 256";
+                             }
+                           }
+                         }
+                         else {
+                           validIP = 0;
+                         }
+                         if (validIP == 0) {
+                           // IP is not valid.  Stop the form from submitting
+                           alert(errMsg);
+                           theEvent.preventDefault();
+                         }
+                       }
+                    }
+                </script>
+            <input type="hidden" id="query_type" name="query_type" value="None">
+            <div class="modal-content">
+              <div class="modal-body">
+                <div class="container-fluid">
+                  <div class="row">
+                    <div class="col-2">
+                      <label for="query_name" style="font-weight: bold;">Query Name</label>
+                      <input type="text" class="form-control" name="query_name" id="query_name" value="{{ queryform.query_name.value|default_if_none:'' }}"
+                             placeholder="REQUIRED" required>
+                    </div>
+                    <div class="col-2">
+                      <label for="groups" style="font-weight: bold;">Groups {{ queryform.groups.value }} </label>
+                      <select id="groups" name="groups" class="form-control">
+                           <option value="None">None</option>
+                        {% for nextGroup in querygroups %}
+                           <option value="{{nextGroup.group_name}}" {% if queryform.groups.value == nextGroup.group_name  %} selected{% endif %}>{{nextGroup.group_name}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <div class="col-2">
+                      <label for="start_date" style="font-weight: bold;">Start Date</label>
+                      <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" name="start_date" id="start_date" value="{{ queryform.start_date.value|default_if_none:prefill_start_date }}"/>
+                        <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-2">
+                      <label for="end_date" style="font-weight: bold;">End Date</label>
+                        <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
+                          <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker2" name="end_date" id="end_date" value="{{ queryform.end_date.value|default_if_none:prefill_end_date }}"/>
+                        <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" style="padding-top:20px;">
+                    <div class="col-6">
+                      <label for="query_description" style="font-weight: bold;">Query Description</label>
+                      <input type="text" name="query_description" id="query_description" value="{{ queryform.query_description.value|default_if_none:'' }}" class="form-control">
+                    </div>
+                    <div class="col-6">
+                      <div class="radio">
+                        <label for="search" style="font-weight: bold;">Search &nbsp;&nbsp;&nbsp;</label>
+                        <label class="radio-inline"><input type="radio" name="opt_radio" onchange="setCheckBoxState('I');" value="I" {% if queryform.opt_radio.value == "I" %}checked{% endif %}>&nbsp;&nbsp; IP(s)/CIDR(s)&nbsp;&nbsp;</label>
+                        <label class="radio-inline"><input type="radio" name="opt_radio" onchange="setCheckBoxState('H');" value="H" {% if queryform.opt_radio.value == "H" %}checked{% endif %}>&nbsp;&nbsp; Hostname(s) &nbsp;&nbsp;</label>
+                        <input type="hidden" id="opt_radio_hidden" value="{{ the_opt_radio }}">
+                      </div>
+                      <textarea class="form-control" rows="1" name="search" id="search" style="min-width: 100%" required>{{queryform.search.value|default_if_none:''}}</textarea>
+                    </div>
+                </div>
+                <div class="row" style="padding-top:10px;">
+                   <div class="col-10">
+                     <div class="container text-center">
+                        <label style="font-weight: bold;">Query Types</label>&nbsp;
+                         <button id="checkUncheckAll2" type="button" class="badge badge-primary" onclick="checkUncheckAll('I');">Check / Uncheck ALL</button>
+                         <input type="hidden" name="cboxStatus" id="cboxStatus" value="0">
+                     </div>
+                   </div>
+                </div>
+                <div class="container-fluid">
+                 <div class="row">
+                  <div class="col-xs-6">
+                     <div style="height:7em;border:1px solid #000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Network Flows
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox"
+                                  name="flows_cb" id="flows"
+                                  {% if queryform.flows_cb.value == True %}checked{% endif %} oninput="setButtonState('flows')">
+                          <label class="form-check-label" for="flows">
+                             Flows &nbsp;
+                             <button id="flows_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Flows', event)">Details</button>
+                             <span class="badge badge-secondary" id="flows_button_off" style="display:none" >Details</span>
+                          </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="tagflows_cb" id="tagflows"
+                                   {% if queryform.tagflows_cb.value == True %}checked{% endif %} oninput="setButtonState('tagflows')">
+                           <label class="form-check-label" for="tagflows">
+                              TagFlows &nbsp;
+                              <button id="tagflows_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('TagFlows', event)">Details</button>
+                              <span class="badge badge-secondary" id="tagflows_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                     </div>
+                  </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                  <div class="col-xs-6">
+                     <div style="height:7em;border:1px solid #000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Attacks
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox"
+                                  name="attack_bars_cb" id="attack_bars"
+                                  {% if queryform.attack_bars_cb.value == True %}checked{% endif %} oninput="setButtonState('attack_bars')">
+                          <label class="form-check-label" for="attack_bars">
+                             BARS Observed DDoS Attacks &nbsp;
+                             <button id="attack_bars_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('BARS', event)">Details</button>
+                              <span class="badge badge-secondary" id="attack_bars_button_off" style="display:none" >Details</span>
+                          </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="attack_commands_cb" id="attack_commands"
+                                   {% if queryform.attack_commands_cb.value == True %}checked{% endif %} oninput="setButtonState('attack_commands')">
+                           <label class="form-check-label" for="attack_commands">
+                              Observed DDoS Attack Commands &nbsp;
+                              <button id="attack_commands_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('CMDS', event)">Details</button>
+                              <span class="badge badge-secondary" id="attack_commands_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                     </div>
+                  </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                  <div class="col-xs-6">
+                     <div style="height:7em;border:1px solid #000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Botnet Information
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox"
+                                  name="botnet_controllers_cb" id="botnet_controllers"
+                                  {% if queryform.botnet_controllers_cb.value == True %}checked{% endif %} oninput="setButtonState('botnet_controllers')">
+                          <label class="form-check-label" for="botnet_controllers">
+                             BARS Botnet Controllers
+                             <button id="botnet_controllers_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('BOTNET-CONTROL', event)">Details</button>
+                             <span class="badge badge-secondary" id="botnet_controllers_button_off" style="display:none" >Details</span>
+                          </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="botnet_victims_cb" id="botnet_victims"
+                                   {% if queryform.botnet_victims_cb.value == True %}checked{% endif %} oninput="setButtonState('botnet_victims')">
+                           <label class="form-check-label" for="botnet_victims">
+                              BARS Observed Infected Victims &nbsp;
+                              <button id="botnet_victims_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('VICTIMS', event)">Details</button>
+                              <span class="badge badge-secondary" id="botnet_victims_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                     </div>
+                  </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                  <div class="col-xs-6">
+                     <div style="height:7em;border:1px solid #000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chatter
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox"
+                                  name="chatter_cb" id="chatter"
+                                  {% if queryform.chatter_cb.value == True %}checked{% endif %} oninput="setButtonState('chatter')">
+                          <label class="form-check-label" for="chatter">
+                             Chatter Text
+                             <button id="chatter_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Chatter', event)">Details</button>
+                             <span class="badge badge-secondary" id="chatter_button_off" style="display:none" >Details</span>
+                          </label>
+                        </div>
+                     </div>
+                  </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                  <div class="col-xs-6">
+                     <div style="height:7em;border:1px solid #000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Routing Information
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox"
+                                  name="routing_updates_cb" id="routing_updates"
+                                  {% if queryform.routing_updates_cb.value == True %}checked{% endif %} oninput="setButtonState('routing_updates')">
+                          <label class="form-check-label" for="routing_updates">
+                             BGP Global Routing Updates
+                             <button id="routing_updates_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Routing-Updates', event)">Details</button>
+                             <span class="badge badge-secondary" id="routing_updates_button_off" style="display:none" >Details</span>
+                          </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="routing_history_cb" id="routing_history"
+                                   {% if queryform.routing_history_cb.value == True %}checked{% endif %} oninput="setButtonState('routing_history')">
+                           <label class="form-check-label" for="routing_history">
+                              BGP History
+                              <button id="routing_history_button_on" style="display:line" type="submit" class="badge badge-primary" onclick="setQueryType('Routing-History', event)">Details</button>
+                              <span class="badge badge-secondary" id="routing_history_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="routing_snapshot_cb" id="routing_snapshot"
+                                   {% if queryform.routing_snapshot_cb.value == True %}checked{% endif %} oninput="setButtonState('routing_snapshot')">
+                           <label class="form-check-label" for="routing_snapshot">
+                              BGP Routing Snapshot
+                              <button id="routing_snapshot_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Routing-Snapshot', event)">Details</button>
+                              <span class="badge badge-secondary" id="routing_snapshot_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                     </div>
+                  </div>
+                 </div>
+                 <br>
+                 <div class="row">
+                  <div class="col-xs-6">
+                     <div style="height:22em;border:1px solid #000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Host Information
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox"
+                                  name="host_banners_cb" id="host_banners"
+                                  {% if queryform.host_banners_cb.value == True %}checked{% endif %} oninput="setButtonState('host_banners')">
+                          <label class="form-check-label" for="host_banners">
+                             Banners &nbsp;
+                             <button id="host_banners_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Host-Banners', event)">Details</button>
+                             <span class="badge badge-secondary" id="host_banners_button_off" style="display:none" >Details</span>
+                          </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="host_dns_cb" id="host_dns"
+                                   {% if queryform.host_dns_cb.value == True %}checked{% endif %} oninput="setButtonState('host_dns')">
+                           <label class="form-check-label" for="host_dns">
+                              DNS Fingerprinting
+                              <button id="host_dns_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Host-DNS', event)">Details</button>
+                              <span class="badge badge-secondary" id="host_dns_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="host_nmap_ports_cb" id="host_nmap_ports"
+                                   {% if queryform.host_nmap_ports_cb.value == True %}checked{% endif %} oninput="setButtonState('host_nmap_ports')">
+                           <label class="form-check-label" for="host_nmap_ports">
+                              NMap Open Ports &nbsp;
+                              <button id="host_nmap_ports_button_on" style="display:none" type="submit" class="badge badge-primary" onclick="setQueryType('Host-NMap', event)">Details</button>
+                              <span class="badge badge-secondary" id="host_nmap_ports_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="host_os_cb" id="host_os"
+                                   {% if queryform.host_os_cb.value == True %}checked{% endif %} oninput="setButtonState('host_os')">
+                           <label class="form-check-label" for="host_os">
+                              NMap OS Fingerprinting &nbsp;
+                              <button id="host_os_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Host-NMap-OS', event)">Details</button>
+                              <span class="badge badge-secondary" id="host_os_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="host_ntp_cb" id="host_ntp"
+                                   {% if queryform.host_ntp_cb.value == True %}checked{% endif %} oninput="setButtonState('host_ntp')">
+                           <label class="form-check-label" for="host_ntp">
+                              NTP Server Info &nbsp;
+                              <button id="host_ntp_button_on" style="display:none" type="submit" class="badge badge-primary" onclick="setQueryType('Host-NTP', event)">Details</button>
+                              <span class="badge badge-secondary" id="host_ntp_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="host_open_ports_cb" id="host_open_ports"
+                                   {% if queryform.host_open_ports_cb.value == True %}checked{% endif %} oninput="setButtonState('host_open_ports')">
+                           <label class="form-check-label" for="host_open_ports">
+                              Open Ports
+                              <button id="host_open_ports_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Host-Ports', event)">Details</button>
+                              <span class="badge badge-secondary" id="host_open_ports_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox"
+                                  name="host_os_finger_cb" id="host_os_finger"
+                                  {% if queryform.host_os_finger_cb.value == True %}checked{% endif %} oninput="setButtonState('host_os_finger')">
+                          <label class="form-check-label" for="host_os_finger">
+                             OS Fingerprinting &nbsp;
+                             <button id="host_os_finger_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Host-OS-Finger', event)">Details</button>
+                             <span class="badge badge-secondary" id="host_os_finger_button_off" style="display:none" >Details</span>
+                          </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="host_router_cb" id="host_router"
+                                   {% if queryform.host_router_cb.value == True %}checked{% endif %} oninput="setButtonState('host_router')">
+                           <label class="form-check-label" for="host_router">
+                              Router Information
+                              <button id="host_router_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Host-Router', event)">Details</button>
+                              <span class="badge badge-secondary" id="host_router_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="host_sip_cb" id="host_sip"
+                                   {% if queryform.host_sip_cb.value == True %}checked{% endif %} oninput="setButtonState('host_sip')">
+                           <label class="form-check-label" for="host_sip">
+                              SIP Info &nbsp;
+                              <button id="host_sip_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Host-SIP', event)">Details</button>
+                              <span class="badge badge-secondary" id="host_sip_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="host_snmp_cb" id="host_snmp"
+                                   {% if queryform.host_snmp_cb.value == True %}checked{% endif %} oninput="setButtonState('host_snmp')">
+                           <label class="form-check-label" for="host_snmp">
+                              SNMP Info &nbsp;
+                              <button id="host_snmp_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Host-SNMP', event)">Details</button>
+                              <span class="badge badge-secondary" id="host_snmp_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="host_ssh_cb" id="host_ssh"
+                                   {% if queryform.host_ssh_cb.value == True %}checked{% endif %} oninput="setButtonState('host_ssh')">
+                           <label class="form-check-label" for="host_ssh">
+                              SSH Info &nbsp;
+                              <button id="host_ssh_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Host-SSH', event)">Details</button>
+                              <span class="badge badge-secondary" id="host_ssh_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="host_tor_cb" id="host_tor"
+                                   {% if queryform.host_tor_cb.value == True %}checked{% endif %} oninput="setButtonState('host_tor')">
+                           <label class="form-check-label" for="host_tor">
+                              Tor Public
+                              <button id="host_tor_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Host-TOR', event)">Details</button>
+                              <span class="badge badge-secondary" id="host_tor_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="host_x509_cb" id="host_x509"
+                                   {% if queryform.host_x509_cb.value == True %}checked{% endif %}  oninput="setButtonState('host_x509')">
+                           <label class="form-check-label" for="host_x509">
+                              X509 Certs
+                              <button id="host_x509_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Host-X509', event)">Details</button>
+                              <span class="badge badge-secondary" id="host_x509_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                     </div>
+                  </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <div class="col-xs-6">
+                     <div style="height:12em;border:1px solid #000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DNS Information
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox"
+                                  name="banners_cb" id="banners"
+                                  {% if queryform.banners_cb.value == True %}checked{% endif %} oninput="setButtonState('banners')">
+                          <label class="form-check-label" for="banners">
+                             Banners PTR &nbsp;
+                             <button id="banners_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Banners-PTR', event)">Details</button>
+                              <span class="badge badge-secondary" id="banners_button_off" style="display:none" >Details</span>
+                          </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="dns_queries_cb" id="dns_queries"
+                                   {% if queryform.dns_queries_cb.value == True %}checked{% endif %} oninput="setButtonState('dns_queries')">
+                           <label class="form-check-label" for="dns_queries">
+                              DNS Queries &nbsp;
+                              <button id="dns_queries_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('DNS', event)">Details</button>
+                              <span class="badge badge-secondary" id="dns_queries_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="nmap_cb" id="nmap"
+                                   {% if queryform.nmap_cb.value == True %}checked{% endif %} oninput="setButtonState('nmap')">
+                           <label class="form-check-label" for="nmap">
+                              NMap Reverse DNS Lookups &nbsp;
+                              <button id="nmap_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('NMap', event)">Details</button>
+                              <span class="badge badge-secondary" id="nmap_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="pdns_cb" id="pdns"
+                                   {% if queryform.pdns_cb.value == True %}checked{% endif %}  oninput="setButtonState('pdns')">
+                           <label class="form-check-label" for="pdns">
+                              PDNS Name-to-Address Mapping &nbsp;
+                              <button id="pdns_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('PDNS', event)">Details</button>
+                              <span class="badge badge-secondary" id="pdns_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="pdns_nxdomain_cb" id="pdns_nxdomain"
+                                   {% if queryform.pdns_nxdomain_cb.value == True %}checked{% endif %} oninput="setButtonState('pdns_nxdomain')">
+                           <label class="form-check-label" for="pdns_nxdomain">
+                              PDNS NXDomain &nbsp;
+                              <button id="pdns_nxdomain_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('NXDomain', event)">Details</button>
+                              <span class="badge badge-secondary" id="pdns_nxdomain_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="pdns_other_cb" id="pdns_other"
+                                   {% if queryform.pdns_other_cb.value == True %}checked{% endif %} oninput="setButtonState('pdns_other')">
+                           <label class="form-check-label" for="pdns_other">
+                              PDNS Other Records &nbsp
+                              <button id="pdns_other_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Other', event)">Details</button>
+                              <span class="badge badge-secondary" id="pdns_other_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                     </div>
+                     <div style="height:10em;border:1px solid #000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Derived Relationships
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="domains_search_cb" id="domains_search"
+                                   {% if queryform.domains_search_cb.value == True %}checked{% endif %} oninput="setButtonState('domains_search')">
+                           <label class="form-check-label" for="domains_search">
+                              DNS Derived Domains (domain search) &nbsp;
+                              <button id="domains_search_button_on" style="display:none" type="submit" class="badge badge-primary" onclick="setQueryType('Der-Dom-Search', event)">Details</button>
+                              <span class="badge badge-secondary" id="domains_search_button_off" style="display:inline" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="domains_ip_search_cb" id="domains_ip_search"
+                                   {% if queryform.domains_ip_search_cb.value == True %}checked{% endif %} oninput="setButtonState('domains_ip_search')">
+                           <label class="form-check-label" for="domains_ip_search">
+                              DNS Derived Domains (IP search) &nbsp;
+                              <button id="domains_ip_search_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Der-Dom-IP-Search', event)">Details</button>
+                              <span class="badge badge-secondary" id="domains_ip_search_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="ips_search_cb" id="ips_search"
+                                   {% if queryform.ips_search_cb.value == True %}checked{% endif %} oninput="setButtonState('ips_search')">
+                           <label class="form-check-label" for="ips_search">
+                              DNS Derived IPs (domain search) &nbsp;
+                              <button id="ips_search_button_on" style="display:none" type="submit" class="badge badge-primary" onclick="setQueryType('Der-IPS-domain', event)">Details</button>
+                              <span class="badge badge-secondary" id="ips_search_button_off" style="display:inline" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="ips_ip_search_cb" id="ips_ip_search"
+                                   {% if queryform.ips_ip_search_cb.value == True %}checked{% endif %} oninput="setButtonState('ips_ip_search')">
+                           <label class="form-check-label" for="ips_ip_search">
+                              DNS Derived IPs (IP search) &nbsp;
+                              <button id="ips_ip_search_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Der-IPS-ip', event)">Details</button>
+                              <span class="badge badge-secondary" id="ips_ip_search_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                     </div>
+                  </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <div class="col-xs-6">
+                     <div style="height:22em;border:1px solid #000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Traffic Information
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox"
+                                  name="traffic_beacons_cb" id="traffic_beacons"
+                                  {% if queryform.traffic_beacons_cb.value == True %}checked{% endif %} oninput="setButtonState('traffic_beacons')">
+                          <label class="form-check-label" for="traffic_beacons">
+                             Beacons &nbsp;
+                             <button id="traffic_beacons_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Traffic-Beacons', event)">Details</button>
+                              <span class="badge badge-secondary" id="traffic_beacons_button_off" style="display:none" >Details</span>
+                          </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="traffic_cookies_cb" id="traffic_cookies"
+                                   {% if queryform.traffic_cookies_cb.value == True %}checked{% endif %} oninput="setButtonState('traffic_cookies')">
+                           <label class="form-check-label" for="traffic_cookies">
+                              Cookies
+                              <button id="traffic_cookies_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Traffic-Cookies', event)">Details</button>
+                              <span class="badge badge-secondary" id="traffic_cookies_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="traffic_files_cb" id="traffic_files"
+                                   {% if queryform.traffic_files_cb.value == True %}checked{% endif %} oninput="setButtonState('traffic_files')">
+                           <label class="form-check-label" for="traffic_files">
+                              Files Extracted &nbsp;
+                              <button id="traffic_files_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Traffic-Files', event)">Details</button>
+                              <span class="badge badge-secondary" id="traffic_files_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="traffic_ftp_cb" id="traffic_ftp"
+                                   {% if queryform.traffic_ftp_cb.value == True %}checked{% endif %} oninput="setButtonState('traffic_ftp')">
+                           <label class="form-check-label" for="traffic_ftp">
+                              FTP Traffic &nbsp;
+                              <button id="traffic_ftp_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Traffic-FTP', event)">Details</button>
+                              <span class="badge badge-secondary" id="traffic_ftp_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="traffic_imap_cb" id="traffic_imap"
+                                   {% if queryform.traffic_imap_cb.value == True %}checked{% endif %} oninput="setButtonState('traffic_imap')">
+                           <label class="form-check-label" for="traffic_imap">
+                              IMAP Email Sessions &nbsp;
+                              <button id="traffic_imap_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Traffic-IMAP', event)">Details</button>
+                              <span class="badge badge-secondary" id="traffic_imap_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="traffic_pop_cb" id="traffic_pop"
+                                   {% if queryform.traffic_pop_cb.value == True %}checked{% endif %} oninput="setButtonState('traffic_pop')">
+                           <label class="form-check-label" for="traffic_pop">
+                              POP Email Sessions
+                              <button id="traffic_pop_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Traffic-POP')">Details</button>
+                              <span class="badge badge-secondary" id="traffic_pop_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox"
+                                  name="traffic_rdp_cb" id="traffic_rdp"
+                                  {% if queryform.traffic_rdp_cb.value == True %}checked{% endif %} oninput="setButtonState('traffic_rdp')">
+                          <label class="form-check-label" for="traffic_rdp">
+                             RDP Traffic &nbsp;
+                             <button id="traffic_rdp_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Traffic-RDP', event)">Details</button>
+                              <span class="badge badge-secondary" id="traffic_rdp_button_off" style="display:none" >Details</span>
+                          </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="traffic_smtp_cb" id="traffic_smtp"
+                                   {% if queryform.traffic_smtp_cb.value == True %}checked{% endif %} oninput="setButtonState('traffic_smtp')">
+                           <label class="form-check-label" for="traffic_smtp">
+                              SMTP Email Sessions
+                              <button id="traffic_smtp_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Traffic-SMTP', event)">Details</button>
+                              <span class="badge badge-secondary" id="traffic_smtp_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="traffic_ssh_cb" id="traffic_ssh"
+                                   {% if queryform.traffic_ssh_cb.value == True %}checked{% endif %} oninput="setButtonState('traffic_ssh')">
+                           <label class="form-check-label" for="traffic_ssh">
+                              SSH Connections &nbsp;
+                              <button id="traffic_ssh_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Traffic-SSH', event)">Details</button>
+                              <span class="badge badge-secondary" id="traffic_ssh_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="traffic_urls_cb" id="traffic_urls"
+                                   {% if queryform.traffic_urls_cb.value == True %}checked{% endif %} oninput="setButtonState('traffic_urls')">
+                           <label class="form-check-label" for="traffic_urls">
+                              URLs &nbsp;
+                              <button id="traffic_urls_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Traffic-URLS', event)">Details</button>
+                              <span class="badge badge-secondary" id="traffic_urls_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="traffic_useragents_cb" id="traffic_useragents"
+                                   {% if queryform.traffic_useragents_cb.value == True %}checked{% endif %} oninput="setButtonState('traffic_useragents')">
+                           <label class="form-check-label" for="traffic_useragents">
+                              UserAgents &nbsp;
+                              <button id="traffic_useragents_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Traffic-UserAgents', event)">Details</button>
+                              <span class="badge badge-secondary" id="traffic_useragents_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                     </div>
+                  </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <div class="col-xs-6">
+                     <div style="height:12em;border:1px solid #000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scanning and Honeypot
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox"
+                                  name="scan_conpot_cb" id="scan_conpot"
+                                  {% if queryform.scan_conpot_cb.value == True %}checked{% endif %} oninput="setButtonState('scan_conpot')">
+                          <label class="form-check-label" for="scan_conpot">
+                             Conpot, ICS Honeypot &nbsp;
+                             <button id="scan_conpot_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Scan-Conpot', event)">Details</button>
+                              <span class="badge badge-secondary" id="scan_conpot_button_off" style="display:none" >Details</span>
+                          </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="scan_cowrie_cb" id="scan_cowrie"
+                                   {% if queryform.scan_cowrie_cb.value == True %}checked{% endif %} oninput="setButtonState('scan_cowrie')">
+                           <label class="form-check-label" for="scan_cowrie">
+                              Cowrie, SSH and Telnet Honeypot
+                              <button id="scan_cowrie_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Scan-Cowrie', event)">Details</button>
+                              <span class="badge badge-secondary" id="scan_cowrie_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="scan_darknet_cb" id="scan_darknet"
+                                   {% if queryform.scan_darknet_cb.value == True %}checked{% endif %} oninput="setButtonState('scan_darknet')">
+                           <label class="form-check-label" for="scan_darknet">
+                              Darknet &nbsp;
+                              <button id="scan_darknet_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Scan-Darknet', event)">Details</button>
+                              <span class="badge badge-secondary" id="scan_darknet_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="scan_dionaea_cb" id="scan_dionaea"
+                                   {% if queryform.scan_dionaea_cb.value == True %}checked{% endif %} oninput="setButtonState('scan_dionaea')">
+                           <label class="form-check-label" for="scan_dionaea">
+                              Dionaea, Malware Capturing Honeypot &nbsp;
+                              <button id="scan_dionaea_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Scan-Dionaea', event)">Details</button>
+                              <span class="badge badge-secondary" id="scan_dionaea_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="scan_port_scan_cb" id="scan_port_scan"
+                                   {% if queryform.scan_port_scan_cb.value == True %}checked{% endif %} oninput="setButtonState('scan_port_scan')">
+                           <label class="form-check-label" for="scan_port_scan">
+                              Port Scan &nbsp;
+                              <button id="scan_port_scan_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Scan-Port-Scan', event)">Details</button>
+                              <span class="badge badge-secondary" id="scan_port_scan_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="scan_scanner_cb" id="scan_scanner"
+                                   {% if queryform.scan_scanner_cb.value == True %}checked{% endif %} oninput="setButtonState('scan_scanner')">
+                           <label class="form-check-label" for="scan_scanner">
+                              Scanner
+                              <button id="scan_scanner_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Scan-Scanner')">Details</button>
+                              <span class="badge badge-secondary" id="scan_scanner_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                     </div>
+                     <div style="height:10em;border:1px solid #000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Miscellaneous
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="misc_antipaste_cb" id="misc_antipaste"
+                                   {% if queryform.misc_antipaste_cb.value == True %}checked{% endif %} oninput="setButtonState('misc_antipaste')">
+                           <label class="form-check-label" for="misc_antipaste">
+                              AntiPaste&nbsp;
+                              <button id="misc_antipaste_button_on" style="display:none" type="submit" class="badge badge-primary" onclick="setQueryType('Misc-AntiPaste', event)">Details</button>
+                              <span class="badge badge-secondary" id="misc_antipaste_button_off" style="display:inline" >Details</span>
+                           </label>
+                        </div>
+
+
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="misc_compromised_hosts_cb" id="misc_compromised_hosts"
+                                   {% if queryform.misc_compromised_hosts_cb.value == True %}checked{% endif %} oninput="setButtonState('misc_compromised_hosts')">
+                           <label class="form-check-label" for="misc_compromised_hosts">
+                              Compromised Hosts&nbsp;
+                              <button id="misc_compromised_hosts_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Misc-Comp-Hosts', event)">Details</button>
+                              <span class="badge badge-secondary" id="misc_compromised_hosts_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                   name="misc_open_resolvers_cb" id="misc_open_resolvers"
+                                   {% if queryform.misc_open_resolvers_cb.value == True %}checked{% endif %} oninput="setButtonState('misc_open_resolvers')">
+                           <label class="form-check-label" for="misc_open_resolvers">
+                              Open Resolvers &nbsp;
+                              <button id="misc_open_resolvers_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Misc-Open-Resolvers', event)">Details</button>
+                              <span class="badge badge-secondary" id="misc_open_resolvers_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                  name="misc_spam_domains_cb" id="misc_spam_domains"
+                                   {% if queryform.misc_spam_domains_cb.value == True %}checked{% endif %} oninput="setButtonState('misc_spam_domains')">
+                           <label class="form-check-label" for="misc_spam_domains">
+                              Spam Domains &nbsp;
+                              <button id="misc_spam_domains_button_on" style="display:none" type="submit" class="badge badge-primary" onclick="setQueryType('Misc-Spam-Domains', event)">Details</button>
+                              <span class="badge badge-secondary" id="misc_spam_domains_button_off" style="display:inline" >Details</span>
+                           </label>
+                        </div>
+
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox"
+                                  name="misc_spam_headers_cb" id="misc_spam_headers"
+                                   {% if queryform.misc_spam_headers_cb.value == True %}checked{% endif %} oninput="setButtonState('misc_spam_headers')">
+                           <label class="form-check-label" for="misc_spam_headers">
+                              Spam Headers &nbsp;
+                              <button id="misc_spam_headers_button_on" style="display:inline" type="submit" class="badge badge-primary" onclick="setQueryType('Misc-Spam-Headers', event)">Details</button>
+                              <span class="badge badge-secondary" id="misc_spam_headers_button_off" style="display:none" >Details</span>
+                           </label>
+                        </div>
+                     </div>
+
+                  </div>&nbsp;
+                 </div>
+                </div>
+                <!-- <div style="height: 150px;"> -->
+                </div>
+              </div>
+
+              <div class="modal-footer">
+                <input type="hidden" name="currentqueryname" value="{{queryform.query_name.value}}">
+                <input type="hidden" name="user_name" id="user_name" value="{{ user }}">
+              </div>
+            </div>
+          </form>
+    </div>
+    {% endif %}
+{% else %}
+    <meta http-equiv="Refresh" content="0; url=/ui/accounts/login/"/>
+{% endif %}
+{% endblock %}

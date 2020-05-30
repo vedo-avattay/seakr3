@@ -1,0 +1,159 @@
+{% extends "seakerUI/base.html" %}
+{% block content %}
+
+{% if user.is_authenticated %}
+    <script type="text/javascript">
+       function setAllButtonStates() {
+         // this is a placeholder to keep JavaScript happy because the onLoad function
+         // on the HTML <body> tag is in the BASE.hmtl file
+         // alert("testing setButtonState..");
+       }
+    </script>
+<div class="page-header" style="padding-left:0px; padding-top:15px; padding-bottom: 15px;">
+  <p class="h4">Result Details</p>
+</div>
+
+<div class="container-fluid">
+
+<div class="card w-100" style="width: 18rem;">
+<div class="card-body w-100">
+
+<div class="row">
+  <div class="col-3">
+     <label for="queryName" style="font-weight: bold;">Name</label>
+     <input type="text" class="form-control" id="queryName" placeholder="Query 1">
+  </div>
+  <div class="col-3">
+     <label for="startDate" style="font-weight: bold;">Description</label>
+     <input type="text" class="form-control" id="owner" placeholder="Description of Query 1">
+  </div>
+  <div class="col-2">
+    <label for="startDate" style="font-weight: bold;">Owner</label>
+    <input type="text" class="form-control" id="owner" placeholder="mkelly" readonly>
+  </div>
+  <div class="col-2">
+    <label for="startDate" style="font-weight: bold;">Status</label>
+    <input type="text" class="form-control" id="status" placeholder="Completed" readonly>
+  </div>
+  <div class="col-2">
+    <label for="startDate" style="font-weight: bold;">Storage Used</label>
+    <input type="text" class="form-control" id="storage" placeholder="484 KB" readonly>
+  </div>
+</div>
+
+<div class="row" style="padding-top: 12px;">
+  <div class="col-2">
+     <label for="queryName" style="font-weight: bold;">Origin</label>
+     <input type="text" class="form-control" id="origin" placeholder="scheduled" readonly>
+  </div>
+  <div class="col-2">
+     <label for="queryName" style="font-weight: bold;">Start Date</label>
+     <input type="text" class="form-control" id="startDate" placeholder="2019-05-06 00:00:00" readonly>
+  </div>
+  <div class="col-2">
+     <label for="startDate" style="font-weight: bold;">End Date</label>
+     <input type="text" class="form-control" id="endDate" placeholder="2019-05-12 23:59:59" readonly>
+  </div>
+  <div class="col-2">
+    <label for="startDate" style="font-weight: bold;">Created At</label>
+    <input type="text" class="form-control" id="owner" placeholder="2019-05-13 00:15:02" readonly>
+  </div>
+  <div class="col-2">
+    <label for="startDate" style="font-weight: bold;">Updated At</label>
+    <input type="text" class="form-control" id="status" placeholder="2019-05-13 00:31:34" readonly>
+  </div>
+</div>
+
+<div style="padding-top: 25px;">
+<button type="button" class="btn btn-primary btn-sm"><i class="far fa-play-circle"></i> Update</button>
+<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#scheduleModal"><i class="far fa-calendar-alt"></i> Requque</button>
+<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#cloneModal"><i class="far fa-copy"></i> Details</button>
+<button type="button" class="btn btn-danger btn-sm"> <i class="far fa-trash-alt"></i> Delete</button>
+</div>
+
+</div> <!-- end card-body -->
+</div> <!-- end card -->
+
+<br />
+<br />
+<br />
+
+<div class="table-responsive w-100">
+<table class="table table-hover w-auto">
+
+  <thead>
+    <tr>
+      <th scope="col">Query Type</th>
+      <th scope="col">Status</th>
+      <th scope="col">Row Count</th>
+      <th scope="col">Error Message</th>
+      <th scope="col">Storage Used</th>
+      <th scope="col">Traffic Metrics</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    <tr>
+      <td>Flows</td>
+      <td>Completed</td>
+      <td>4,248</td>
+      <td>-</td>
+      <td>424 KB</td>
+      <td>
+        <button type="button" class="btn btn-primary btn-sm"><i class="far fa-play-circle"></i> Traffic Metrics</button>
+      </td>
+      <td>
+        <button type="button" class="btn btn-primary btn-sm"><i class="far fa-play-circle"></i> View</button>
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#scheduleModal"><i class="far fa-calendar-alt"></i> Export</button>
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#cloneModal"><i class="far fa-copy"></i> Rerun</button>
+        <button type="button" class="btn btn-danger btn-sm"> <i class="far fa-trash-alt"></i> Delete</button>
+      </td>
+    </tr>
+
+    <tr>
+      <td>Banners PTR</td>
+      <td>Completed</td>
+      <td>4,248</td>
+      <td>-</td>
+      <td>424 KB</td>
+      <td>
+        <button type="button" class="btn btn-primary btn-sm"><i class="far fa-play-circle"></i> Traffic Metrics</button>
+      </td>
+      <td>
+        <button type="button" class="btn btn-primary btn-sm"><i class="far fa-play-circle"></i> View</button>
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#scheduleModal"><i class="far fa-calendar-alt"></i> Export</button>
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#cloneModal"><i class="far fa-copy"></i> Rerun</button>
+        <button type="button" class="btn btn-danger btn-sm"> <i class="far fa-trash-alt"></i> Delete</button>
+      </td>
+    </tr>
+
+    <tr>
+      <td>DNS Queries</td>
+      <td>Completed</td>
+      <td>4,248</td>
+      <td>-</td>
+      <td>424 KB</td>
+      <td>
+        <button type="button" class="btn btn-primary btn-sm"><i class="far fa-play-circle"></i> Traffic Metrics</button>
+      </td>
+      <td>
+        <button type="button" class="btn btn-primary btn-sm"><i class="far fa-play-circle"></i> View</button>
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#scheduleModal"><i class="far fa-calendar-alt"></i> Export</button>
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#cloneModal"><i class="far fa-copy"></i> Rerun</button>
+        <button type="button" class="btn btn-danger btn-sm"> <i class="far fa-trash-alt"></i> Delete</button>
+      </td>
+    </tr>
+
+
+
+  </tbody>
+
+</table>
+</div>
+{% else %}
+    <meta http-equiv="Refresh" content="0; url=/ui/accounts/login/"/>
+{% endif %}
+
+{% endblock %}

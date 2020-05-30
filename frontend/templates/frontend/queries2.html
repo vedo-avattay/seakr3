@@ -1,0 +1,469 @@
+{% extends "seakerUI/base.html" %}
+{% block content %}
+<div class="page-header" style="padding-left:0px;">
+  <button type="button" data-toggle="modal" data-target="#newQueryModal" class="btn btn-success" style="margin-top: 25px; margin-bottom:25px;"><i class="fas fa-plus"></i> New Query</button>
+</div>
+
+<div class="table-responsive w-100">
+<table class="table table-hover w-auto">
+  <script type="text/javascript">
+     function setAllButtonStates() {
+       // this is a placeholder to keep JavaScript happy because the onLoad function
+       // on the HTML <body> tag is in the BASE.hmtl file
+     }
+  </script>
+  <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">Username</th>
+      <th scope="col">Name</th>
+      <th scope="col">Description</th>
+      <th scope="col">Schedule</th>
+      <th scope="col">Last Run</th>
+      <th scope="col">Status</th>
+      <th scope="col" style="column-width: 45px;">Size</th>
+      <th scope="col" style="column-width: 125px;">Created</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td class="clickable" data-toggle="collapse" data-target=".accordion1"><i class="fas fa-angle-right" style="font-size:18px; cursor: pointer;"></i></td>
+      <td>mkelly2</td>
+      <td>Query 1</td>
+      <td>Description of query 1</td>
+      <td><span class="badge badge-secondary">None</span></td>
+      <td>2019-04-07 00:59</td>
+      <td>Running</td>
+      <td></td>
+      <td></td>
+      <td>
+        <button type="button" class="btn btn-primary btn-sm"><i class="far fa-play-circle"></i> Run</button>
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#scheduleModal"><i class="far fa-calendar-alt"></i> Schedule</button>
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#cloneModal"><i class="far fa-copy"></i> Clone</button>
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#newQueryModal"><i class="far fa-edit"></i> Edit</button>
+        <button type="button" class="btn btn-danger btn-sm"> <i class="far fa-trash-alt"></i> Delete</button>
+      </td>
+    </tr>
+    <tr class="accordion1 collapse">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Running</td>
+      <td>27KB</td>
+      <td>2019-04-07 01:15</td>
+      <td>
+        <a href="/ui/results" target="_blank">View</a>&nbsp;-&nbsp; 
+        <a href="">Export</a>
+      </td>
+    </tr>
+    <tr class="accordion1 collapse">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Complete</td>
+      <td>488KB</td>
+      <td>2019-04-04 09:05</td>
+      <td>
+        <a href="/ui/results" target="_blank">View</a>&nbsp;-&nbsp;
+        <a href="">Export</a>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="clickable" data-toggle="collapse" data-target=".accordion2"><i class="fas fa-angle-right" style="font-size:18px; cursor: pointer;"></i></td>
+      <td>mkelly2</td>
+      <td>Query 2</td>
+      <td>Description of query 2</td>
+      <td><span class="badge badge-success">Weekly</span></td>
+      <td>2019-04-05 13:40</td>
+      <td>Complete</td>
+      <td></td>
+      <td></td>
+      <td>
+        <button type="button" class="btn btn-primary btn-sm"><i class="far fa-play-circle"></i> Run</button>
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#scheduleModal"><i class="far fa-calendar-alt"></i> Schedule</button>
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#cloneModal"><i class="far fa-copy"></i> Clone</button>
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#newQueryModal"><i class="far fa-edit"></i> Edit</button>
+        <button type="button" class="btn btn-danger btn-sm"> <i class="far fa-trash-alt"></i> Delete</button>
+      </td>
+    </tr>
+    <tr class="accordion2 collapse">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Complete</td>
+      <td>887KB</td>
+      <td>2019-04-05 14:22</td>
+      <td>
+        <a href="/ui/results" target="_blank">View</a>&nbsp;-&nbsp;
+        <a href="">Export</a>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="clickable" data-toggle="collapse" data-target=".accordion3"><i class="fas fa-angle-right" style="font-size:18px; cursor: pointer;"></i></td>
+      <td>mkelly2</td>
+      <td>Query 3</td>
+      <td>Description of query 3</td>
+      <td><span class="badge badge-success">Daily</span></td>
+      <td>2019-04-01 19:22</td>
+      <td>Complete</td>
+      <td></td>
+      <td></td>
+      <td>
+        <button type="button" class="btn btn-primary btn-sm"><i class="far fa-play-circle"></i> Run</button>
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#scheduleModal"><i class="far fa-calendar-alt"></i> Schedule</button>
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#cloneModal"><i class="far fa-copy"></i> Clone</button>
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#newQueryModal"><i class="far fa-edit"></i> Edit</button>
+        <button type="button" class="btn btn-danger btn-sm"> <i class="far fa-trash-alt"></i> Delete</button>
+      </td>
+    </tr>
+    <tr class="accordion3 collapse">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Complete</td>
+      <td>7MB</td>
+      <td>2019-04-01 19:57</td>
+      <td>
+        <a href="/ui/results" target="_blank">View</a>&nbsp;-&nbsp;
+        <a href="">Export</a>
+      </td>
+    </tr>
+
+
+  </tbody>
+</table>
+</div>
+
+<!-- New Query Modal -->
+<div class="modal fade" id="newQueryModal" tabindex="-1" role="dialog" aria-labelledby="newQueryModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <form name="queryForm" method="post">
+      {% csrf_token %}
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="newQueryModalLabel">New Query</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="container-fluid">
+
+            <div class="row">
+              <div class="col-4">
+                <label for="query_name" style="font-weight: bold;">Query Name</label>
+                <input type="text" class="form-control" name="query_name" id="query_name" placeholder="Enter new query name">
+              </div>
+              <div class="col-4">
+                <label for="start_date" style="font-weight: bold;">Start Date</label>
+                <div class="input-group date" data-provide="datepicker">
+                  <input type="text" name="start_date" id="start_date" class="form-control">
+                  <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
+                </div>
+              </div>
+              <div class="col-4">
+                <label for="start_date" style="font-weight: bold;">End Date</label>
+                <div class="input-group date" data-provide="datepicker">
+                  <input type="text" name="end_date" id="end_date" class="form-control">
+                  <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row" style="padding-top:20px;">
+              <div class="col-6">
+                <label for="query_description" style="font-weight: bold;">Query Description</label>
+                <textarea class="form-control" rows="1" name="query_description" id="query_description" style="min-width: 100%"></textarea>
+              </div>
+              <div class="col-6">
+                <div class="radio">
+                  <label for="search" style="font-weight: bold;">Search &nbsp;&nbsp;&nbsp;</label>
+                  <label class="radio-inline"><input type="radio" name="opt_radio" value="H" checked>&nbsp;&nbsp; Hostname(s) &nbsp;&nbsp;</label>
+                  <label class="radio-inline"><input type="radio" name="opt_radio" value="I">&nbsp;&nbsp; IP Address(es) &nbsp;&nbsp;</label>
+                  <label class="radio-inline"><input type="radio" name="opt_radio" value="C ">&nbsp;&nbsp; CIDR(s)</label>
+                </div>
+                <textarea class="form-control" rows="1" name="search" id="search" style="min-width: 100%"></textarea>
+              </div>
+            </div>
+   
+            <div class="row" style="padding-top:20px;">
+              <div class="col-5">
+
+                <label style="font-weight: bold;">Query Types</label>
+                <div style="height: 300px; overflow-y: scroll;">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="dc1" name="dc1" id="defaultCheck1">
+                  <label class="form-check-label" for="defaultCheck1">
+                    Flows
+                  </label> &nbsp;<i class="far fa-edit" style="cursor: pointer;"></i>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="dc2" name="dc2" id="defaultCheck2">
+                  <label class="form-check-label" for="defaultCheck2">
+                    Banners
+                  </label> &nbsp;<i class="far fa-edit" style="cursor: pointer;"></i>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="dc3" name="dc3" id="defaultCheck3">
+                  <label class="form-check-label" for="defaultCheck3">
+                    DNS Queries
+                  </label> &nbsp;<i class="far fa-edit" style="cursor: pointer;"></i>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="dc4" name="dc4" id="defaultCheck4">
+                  <label class="form-check-label" for="defaultCheck4">
+                    NMap Reverse DNS Lookups
+                  </label> &nbsp;<i class="far fa-edit" style="cursor: pointer;"></i>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="dc5" name="dc5" id="defaultCheck5">
+                  <label class="form-check-label" for="defaultCheck5">
+                    PDNS Name-to-Address Mapping
+                  </label> &nbsp;<i class="far fa-edit" style="cursor: pointer;"></i>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="dc6" name="dc6" id="defaultCheck6">
+                  <label class="form-check-label" for="defaultCheck6">
+                    PDNS NXDomain
+                  </label> &nbsp;<i class="far fa-edit" style="cursor: pointer;"></i>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="dc7" name="dc7" id="defaultCheck7">
+                  <label class="form-check-label" for="defaultCheck7">
+                    PDNS Other Records
+                  </label> &nbsp;<i class="far fa-edit" style="cursor: pointer;"></i>
+                </div>
+              </div> <!-- end scrolling div -->
+            </div> <!-- end column -->
+
+              <div class="col-7">
+
+                <div class="container-fluid">
+                  <label style="font-weight: bold;">Query Type Details (Flows) &nbsp;</label>
+                  <span class="badge badge-success">Save</span>
+                  <span class="badge badge-secondary">Cancel</span>
+               
+                  <div class="row" style="height: 300px; overflow-y: scroll;">
+                  <!-- Note, we did the grid layout this as a way to easily show/hide Query Type fields with display: none -->
+
+                    <div class="col-6">
+                      <div class="row">
+                        <div class="col">
+                          <label for="ip_addresses">IP Address(es)</label>
+                          <input type="text" class="form-control" name="ip_addresses" id="ip_addresses">
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col">
+                          <label for="ip_addresses_excluded">Exclude IP Address(es)</label>
+                          <input type="text" class="form-control" name="ip_addresses_excluded" id="ip_addresses_excluded">
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col">
+                          <label for="proto">Proto(s)</label>
+                          <input type="text" class="form-control" name="protos" id="proto">
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col">
+                          <label for="protos_excluded">Exclude Proto(s)</label>
+                          <input type="text" class="form-control" name="protos_excluded" id="protos_excluded">
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col">
+                          <label for="cc">Bytes</label>
+                          <input type="text" class="form-control" name="bytes" id="bytes">
+                        </div>
+                      </div>
+                    </div> <!-- end div for 1st column in query type details -->
+
+                    <div class="col-6">
+                      <div class="row">
+                        <div class="col">
+                          <label for="port">Port(s)</label>
+                          <input type="text" class="form-control" name="ports" id="port">
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col">
+                          <label for="ports_excluded">Exclude Port(s)</label>
+                          <input type="text" class="form-control" name="ports_excluded" id="ports_excluded">
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col">
+                          <label for="cc">CC(s)</label>
+                          <input type="text" class="form-control" name="ccs" id="cc">
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col">
+                          <label for="ccs_excluded">Exclude CC(s)</label>
+                          <input type="text" class="form-control" name="ccs_excluded" id="ccs_excluded">
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col">
+                          <label for="tcp_flags">TCP Flags</label>
+                          <input type="text" class="form-control" name="tcp_flags" id="tcp_flags">
+                        </div>
+                      </div>
+                    </div> <!-- end div for 2nd column in query type details -->
+                  </div> <!-- end div for query type details -->
+                </div> <!-- end container-fluid -->
+              </div> <!-- end col-7 -->
+            </div> <!-- end row for query types & query type details-->
+          </div> <!-- end container fluid -->
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-success">Save Query</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Edit Query Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">Edit Query</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-5">smaller</div>
+            <div class="col-7">bigger</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Schedule Modal -->
+<div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="scheduleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="scheduleModalLabel">Edit Query Schedule</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+        <div class="col">        
+        <label>Frequency</label>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="frequency" id="frequency1" value="none" checked>
+            <label class="form-check-label" for="frequency1">
+              None
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="frequency" id="frequency2" value="daily">
+            <label class="form-check-label" for="frequency2">
+              Daily
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="frequency" id="frequency3" value="weekly">
+            <label class="form-check-label" for="frequency3">
+              Weekly
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="frequency" id="frequency4" value="monthly">
+            <label class="form-check-label" for="frequency4">
+              Monthly
+            </label>
+          </div>
+        </div> <!-- end col -->
+
+        <div class="col">
+          <label for="startDateSchedule">Start Date</label>
+            <div class="input-group date" data-provide="datepicker">
+              <input type="text" id="startDateSchedule" class="form-control">
+              <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
+            </div>
+        </div>
+
+        <div class="col">
+        <label>Start Time</label>
+        <div class="input-group date" id="datetimepicker3" data-target-input="nearest">
+          <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker3"/>
+          <div class="input-group-append" data-target="#datetimepicker3" data-toggle="datetimepicker">
+             <div class="input-group-text"><i class="far fa-clock"></i></div>
+          </div>
+        </div>
+        </div> <!-- end col -->
+        <script type="text/javascript">
+          $(function () {
+              $('#datetimepicker3').datetimepicker({
+                  format: 'LT'
+              });
+          });
+        </script>
+        </div> <!-- end row --> 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Clone Modal -->
+<div class="modal fade" id="cloneModal" tabindex="-1" role="dialog" aria-labelledby="cloneModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="cloneModalLabel">Clone Query</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="newQueryName">New Query Name</label>
+            <input type="text" class="form-control" id="newQueryName" placeholder="Enter new query name">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- <h3>List of jobs in database</h3> -->
+<!-- {% for job in job_list %} -->
+<!--  <h5>{{ job.job_name }}</h5> -->
+<!-- {% endfor %} -->
+
+{% endblock %}

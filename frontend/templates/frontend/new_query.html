@@ -1,0 +1,101 @@
+{% extends "frontend/navbar.html" %}
+{% block content %}
+
+<script>
+    $( function() {
+        $( "#datepicker" ).datepicker();
+      } );
+
+</script>
+
+{% if user.is_authenticated %}
+
+<body>
+    <div class='container-fluid'>
+            <div class="card">
+                <div class="card-header">
+                    Create Query
+                </div>
+                <div class="card-body">
+
+
+                        <div class="row">
+                            <form method="post">
+
+                                {% csrf_token %}
+                                <div class="form-group">
+
+                          <div class="col-sm">                    
+                            <label for="{{query_form.id_for_label}}">Query Name</label>
+                                
+                            {{query_form.name}}
+                          </div>
+                          </form>
+
+                        
+                          <div class="col-sm">
+                            One of three columns
+                          </div>
+                          <div class="col-sm">
+                            One of three columns
+                          </div>
+                        </div>
+                    
+
+                        <div class="row">
+                            <div class="form-group">
+
+                                <div class="col-md">                    
+                                
+                                <label for="{{query_form.id_for_label}}">Query Description</label>
+      
+                                {{query_form.description}}
+      
+                              </div>
+                                <div class="col-md">
+                                  One of three columns
+                                </div>
+                                <div class="col-md">
+                                  One of three columns
+                                </div>
+                              </div>
+
+                        </div>
+                    </div>
+
+                    </div>
+                        </div>
+
+                        <div clas="container">
+
+                    <div class="row">
+
+                  <form method="post">
+                        {% csrf_token %}
+
+                        <div class="col-sm">
+                        
+                        {{ query_form.as_p }}
+
+                        </div>
+
+                    </form>
+                    <form method="post"></form>
+                        <div class="col-sm">
+
+                        {{ query_job_form.as_p }}
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" value="Submit">Submit</button>
+                    </form>
+
+                    </div>
+                </div>
+             </div>
+              </div>
+
+              {% endif %}
+
+{% endblock %}

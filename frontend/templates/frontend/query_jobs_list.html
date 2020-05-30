@@ -1,0 +1,111 @@
+{% extends "frontend/navbar.html" %}
+
+{% block content %}
+
+    <div class="container-fluid">
+
+ <!--           <form action="" method="get" style="text-align:center">
+              
+                <div style="width:50%; margin-left:50px;">
+                  {{ filter.form }}
+
+                </div>     
+          
+            </form>
+        -->
+
+
+        <table class="table table-hover">
+
+     
+            <thead>
+                <th>Query Name
+                </th>
+                <th>Query Description</th>
+                <th>User Name </th>
+                <th>Created</th>
+                <th>Updated</th>
+                <th>Hostnames</th>
+                <th>IPs</th>
+                <th>Actions</th>
+            </thead>
+            <tbody>
+              
+                {% for job in query_jobs %}
+                <tr>
+                    <td>{{job.query.name}}</td>
+                    <td>{{job.query.description}}</td>
+                    <td>hardcoded user</td>
+                    <td>{{job.start_date}}</td>
+                    <td>{{job.end_date}}</td>
+                    <td>{% for host in job.hostname.all %}
+                      <p>{{host}}</p>
+
+                      {% endfor %}
+
+                    </td>
+
+                    <td>{% for ip in job.ip.all %}
+                      <p>{{ip}}</p>
+
+                      {% endfor %}
+
+                    </td>
+
+                    <td>
+                        <!-- <button type="button" class="btn btn-primary btn-sm"><i class="far fa-play-circle"></i> Run</button> -->
+                        <!-- <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#scheduleModal"><i class="fa fa-calendar-alt"></i> Schedule</button> -->
+                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#Clone"><i class="fa fa-copy"></i> Clone</button>
+                          <div id="Clone" class="modal fade" role="dialog">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <form method="post" id="CloneQueryForm" action="/ui/clonequeries/{{ query.id }}">
+                                 <div class="modal-header">
+                                   <h4 class="modal-title">Clone Query</h4>
+                                   <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                 </div>
+                                 <div class="modal-body">
+                                     {% csrf_token %}
+                                     <input type="text" class="form-control" name="cloned_query_name" id="cloned_query_name"
+                                       placeholder="New Name" required>
+                                     <input type="hidden" name="currentqueryname" value="{{ query.query_name }}">
+                                 </div>
+                                 <div class="modal-footer">
+                                     <button type="submit" class="submit-btn btn-default">Save</button>
+                                 </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        <a href="/ui/editqueries/{{ query.id }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit</a>
+                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#Delete"><i class="fa fa-trash-alt"></i> Delete</button>
+                          <div id="Delete" class="modal fade" role="dialog">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <form method="post" id="DeleteQueryForm" action="/ui/deletequeries/{{ query.id }}">
+                                 <div class="modal-header">
+                                   <h4 class="modal-title">Delete Query?</h4>
+                                   <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                 </div>
+                                 <div class="modal-body">
+                                     {% csrf_token %}
+                                     <input type="text" class="form-control" name="delete_answer" id="delete_answer"
+                                       placeholder="Yes or No?" required>
+                                 </div>
+                                 <div class="modal-footer">
+                                     <button type="submit" class="submit-btn btn-default">Save</button>
+                                 </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                      </td>
+
+                    </tr>
+
+                {% endfor %}
+                    
+
+                </div>
+
+{% endblock %}

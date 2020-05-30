@@ -1,0 +1,105 @@
+{% extends "seakerUI/base.html" %}
+{% block content %}
+
+{% if user.is_authenticated %}
+    <script type="text/javascript">
+       function setAllButtonStates() {
+         // this is a placeholder to keep JavaScript happy because the onLoad function
+         // on the HTML <body> tag is in the BASE.hmtl file
+         // alert("testing setButtonState..");
+       }
+    </script>
+    <div>
+        <table class="table">
+            {% if query_flag == "New" %}
+            <h3><center>Enter your NEW Group, select Member(s) and press Save Group</center></h3>
+            {% elif query_flag == "Edit" %}
+            <h3><center>Make changes to the Group and press Save Group</center></h3>
+            {% else %}
+            <thead>
+                <th>Group Name</th>
+                <th>Group Description</th>
+                <th>Group Members</th>
+                <th><a href="/ui/newgroups" class="btn btn-success btn-sm">New Group</a>
+                </th>
+            </thead>
+            {% endif %}
+            <tbody>
+                {% for nextgroup in querygroups %}
+                    <tr>
+                      <td>{{nextgroup.group_name}}</td>
+                      <td>{{nextgroup.group_desc}}</td>
+                      <td>{{nextgroup.display_members}}</td>
+                      <td>
+                        <a href="/ui/editgroups/{{ nextgroup.id }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit</a>
+                        <!-- <a href="/ui/deletegroups/{{ nextgroup.id }}" class="btn btn-danger btn-sm"><i class="fa fa-trash-alt"></i> Delete</a> -->
+                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#Delete"><i class="fa fa-trash-alt"></i> Delete</button>
+                        <div id="Delete" class="modal fade" role="dialog">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <form method="post" id="DeleteQueryType" action="/ui/deletegroups/{{ nextgroup.id }}">
+                                <div class="modal-header">
+                                  <h4 class="modal-title">Delete Group?</h4>
+                                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                  {% csrf_token %}
+                                  <input type="text" class="form-control" name="delete_answer" id="delete_answer"
+                                         placeholder="Yes or No?" required>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="submit" class="submit-btn btn-default">Save</button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% if not query_flag == "None" %}
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            <div class="modal-content">
+              <div class="modal-body">
+                <div class="container-fluid">
+                  <div class="row">
+                    <div class="col-3">
+                      <label for="group_name" style="font-weight: bold;">Group Name</label>
+                      <input type="text" class="form-control" name="group_name" id="group_name" value="{{ groupsform.group_name.value|default_if_none:'' }}" placeholder="Enter new Group name">
+                    </div>
+                    <div class="col-3">
+                      <label for="group_desc" style="font-weight: bold;">Group Description</label>
+                      <input type="text" class="form-control" name="group_desc" id="group_desc" value="{{ groupsform.group_desc.value|default_if_none:'' }}" placeholder="Enter new Group Description">
+                    </div>
+                    <div class="col-3">
+                      <div class="form-group">
+                        <label for="group_members" class="" style="font-weight: bold;">Group Members</label>
+                        <select id="group_members" name="group_members" class="form-control" multiple="multiple">
+                            {% for nextUser in users %}
+                               <option value="{{nextUser.username}}" {% if nextUser.username in groupsform.display_members.value  %} selected{% endif %}>{{nextUser.username}}</option>
+                            {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div><br>
+              <div class="modal-footer">
+                <a href="/ui/groups" class="btn btn-secondary btn-sm">Cancel</a>
+                <button type="submit" class="btn btn-success btn-sm">Save Group</button>
+                <input type="hidden" name="currentgroupname" value="{{groupsform.group_name.value}}">
+                <input type="hidden" name="display_members" value="TBD">
+              </div>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+{% else %}
+    <meta http-equiv="Refresh" content="0; url=/ui/accounts/login/"/>
+{% endif %}
+{% endblock %}

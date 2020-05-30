@@ -1,0 +1,59 @@
+{% extends 'frontend/base.html' %}
+
+{% load static %}
+
+<html>
+
+{% block navbar %}
+
+<body>
+
+  {% if request.user.is_authenticated %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+  <a class="navbar-brand" href="/"><img src="{% static 'seakerUI/images/seaker_small.png' %}" alt="Seaker"></a>
+
+  <div class="collapse navbar-collapse w-100 order-1 order-md-0 dual-collapse2" id="navbarSupportedContentLeft">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'queries' %}">&nbsp;&nbsp;Home <span class="sr-only">(current)</span></a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'groups' %}">&nbsp;&nbsp;Groups <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'results' %}">&nbsp;&nbsp;Results <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-link" href="{% url 'new_query' %}">
+        <a class="btn btn-sm btn-success" href="{% url 'new_query' %}"><i class="fa fa-plus"></i> New Query <span class="sr-only">(current)</span></a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="collapse navbar-collapse w-100 order-2 dual-collapse2" id="navbarSupportedContentRight" >
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/admin">&nbsp;&nbsp;Admin <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      {{ user }}
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Change Password</a>
+          <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<br />
+
+{% endif %}
+
+ {% endblock %}
+
+</body>
+</html>
