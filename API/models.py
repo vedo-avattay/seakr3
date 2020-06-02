@@ -49,6 +49,16 @@ class Query(models.Model):
     def __str__(self):
         return self.query_job.name + ' - ' + self.query_type
 
+class Results(models.Model):
+
+    query_job = models.ForeignKey(QueryJob, related_name='results', on_delete=models.CASCADE)
+
+    augury_job_id = models.IntegerField(blank=True, null=True)
+
+    augury_response = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.augury_response    
 
 class IP(models.Model):
 
