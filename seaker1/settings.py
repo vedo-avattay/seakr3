@@ -202,7 +202,7 @@ LOGGING = {
     }
 }
 
-CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = False 
 
 #LOGIN_URL = "accounts/login"
 LOGIN_REDIRECT_URL = '/'

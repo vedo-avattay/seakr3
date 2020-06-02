@@ -22,6 +22,8 @@ class QueryJob(models.Model):
 
     external_status = models.CharField(default="Not Submitted", max_length=24, blank=True)
 
+    augury_job_id = models.IntegerField(blank=True, null=True)
+
     ip_addr = models.CharField(max_length=1040, blank=True, validators=[validate_ips])
 
     ptr = models.CharField(max_length=1040, blank=True)

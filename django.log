@@ -3289,3 +3289,33 @@ django.core.exceptions.ImproperlyConfigured: Field name `any_ip_addr` is not val
 "POST /api/jobs HTTP/1.1" 400 109
 "POST /api/jobs HTTP/1.1" 400 50
 "POST /api/jobs HTTP/1.1" 400 57
+Forbidden (CSRF cookie not set.): /accounts/login/
+"POST /accounts/login/?next=/ HTTP/1.1" 403 2864
+"GET /favicon.ico HTTP/1.1" 404 3451
+Forbidden (CSRF cookie not set.): /accounts/login/
+"POST /accounts/login/?next=/ HTTP/1.1" 403 2864
+Forbidden (CSRF cookie not set.): /accounts/login/
+"POST /accounts/login/?next=/ HTTP/1.1" 403 2864
+"GET /favicon.ico HTTP/1.1" 404 3451
+Forbidden (CSRF cookie not set.): /accounts/login/
+"POST /accounts/login/?next=/ HTTP/1.1" 403 2864
+"GET /favicon.ico HTTP/1.1" 404 3451
+Forbidden (CSRF cookie not set.): /accounts/login/
+"POST /accounts/login/?next=/ HTTP/1.1" 403 2864
+"GET /favicon.ico HTTP/1.1" 404 3451
+Forbidden (CSRF cookie not set.): /accounts/login/
+"POST /accounts/login/?next=/ HTTP/1.1" 403 2864
+"GET /favicon.ico HTTP/1.1" 404 3451
+"GET /api/jobs HTTP/1.1" 401 5079
+"GET /api/jobs HTTP/1.1" 401 58
+"GET /api/jobs HTTP/1.1" 401 27
+"GET /api/jobs HTTP/1.1" 401 5079
+"POST /api/jobs HTTP/1.1" 401 27
+"POST /api/jobs HTTP/1.1" 401 27
+"POST /api/jobs HTTP/1.1" 401 27
+"POST /api/jobs HTTP/1.1" 401 27
+"POST /api/jobs HTTP/1.1" 401 27
+"POST /api/jobs HTTP/1.1" 401 27
+"POST /api/jobs HTTP/1.1" 401 27
+"POST /api/jobs HTTP/1.1" 401 27
+"POST /api/jobs HTTP/1.1" 400 256
