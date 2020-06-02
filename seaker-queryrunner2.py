@@ -40,7 +40,7 @@ connection = pymysql.connect("localhost", "root", "DEXTER!dexter1", "seaker")
 # Check the seaker database for jobs with status of "Submitted" or "In Progress"
 # Returns:
 #	tuple containing augury_job_id's (fetchall results)
-def get_seaker_submitted_jobs():
+def get_submitted_jobs():
     try:
         with connection.cursor() as cursor:
             cursor.execute(
@@ -86,24 +86,24 @@ def get_augury_job_status(submitted_jobs):
 # Parameters:
 #	augury_job_id:
 #	status:
-def set_seaker_job_status(augury_job_id, status):
+def set_job_status(augury_job_id, status):
     try:
         with connection.cursor() as cursor:
             cursor.execute('update API_queryjob set `status`=%s where `augury_job_id`=%s', (status, augury_job_id))
             connection.commit()
     except pymysql.Error as e:
-        print("set_seaker_job_status: failed to set job status")
+        print("set_job_status: failed to set job status")
         print("Error %d: %s" % (e.args[0], e.args[1]))
     return
 
 
-def set_seaker_augury_job_id(queryjob_id, augury_job_id):
+def set_augury_job_id(queryjob_id, augury_job_id):
     try:
         with connection.cursor() as cursor:
             cursor.execute('update API_queryjob set `augury_job_id`=%s where `id`=%s', (augury_job_id, queryjob_id))
             connection.commit()
     except pymysql.Error as e:
-        print("set_seaker_job_augury_job_id: failed to set job augury_job_id")
+        print("set_augury_job_id: failed to set job augury_job_id")
         print("Error %d: %s" % (e.args[0], e.args[1]))
     return
 
@@ -152,17 +152,17 @@ def get_augury_job_results(job_status):
                 except pymysql.Error as e:
                     print("failed to save to db")
                     print("Error %d: %s" % (e.args[0], e.args[1]))
-            set_seaker_job_status(augury_job_id, "Completed")
+            set_job_status(augury_job_id, "Completed")
 
 
 # Returns tuple of new jobs (status of "Pending")
-def get_seaker_new_jobs():
+def get_new_jobs():
     try:
         with connection.cursor() as cursor:
-            cursor.execute("select * from seakerUI_job where status = 'Pending'")
+            cursor.execute("select * from API_queryjob where seaker_status = 'Pending'")
             new_jobs = cursor.fetchall()
     except pymysql.Error as e:
-        print("get_seaker_new_jobs: failed to read new jobs from db")
+        print("get_new_jobs: failed to read new jobs from db")
         print("Error %d: %s" % (e.args[0], e.args[1]))
     return new_jobs
     return
@@ -191,28 +191,34 @@ def create_augury_job(new_job):
     # augury_job_id = ...
 
     # Set the job status locally to Submitted
-    set_seaker_job_status(augury_job_id, "Submitted")
+    set_job_status(augury_job_id, "Submitted")
 
     # Save the augury_job_id locally
-    set_seaker_augury_job_id(queryjob_id, augury_job_id)
+    set_augury_job_id(queryjob_id, augury_job_id)
     return
 
 
 def main():
-    # Get jobs that have been submitted to Augury, but haven't completed yet
-    submitted_jobs = get_seaker_submitted_jobs()
+    # Get jobs that have been submitted to Augury (but haven't completed yet)
+#    submitted_jobs = get_submitted_jobs()
 
-    # Check on their current status
-    job_status = get_augury_job_status(submitted_jobs)
+#    if len(submitted_jobs) > 0:
+        # Check on their current status
+#        job_status = get_augury_job_status(submitted_jobs)
 
-    # Get and save the results of any that are Complete
-    get_augury_job_results(job_status)
+        # Get and save the results of any that are Complete
+#        get_augury_job_results(job_status)
 
-    # Get jobs that have NOT been submitted to Augury
-    new_jobs = get_seaker_new_jobs()
-    # Submit those jobs to Augury
-    # for new_job in new_jobs:
-    #	create_augury_job(new_job)
+    # Get local jobs that have NOT been submitted to Augury yet
+    new_jobs = get_new_jobs()
+
+    if len(new_jobs) > 0:
+        # Submit new jobs to Augury
+        # for new_job in new_jobs:
+        #	create_augury_job(new_job)
+        print(new_jobs)
+    else:
+        print('there were no new jobs')
 
     # Disconnect from database
     connection.close()
