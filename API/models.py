@@ -22,6 +22,8 @@ class QueryJob(models.Model):
 
     external_status = models.CharField(default="Not Submitted", max_length=24, blank=True)
 
+    results_id = models.IntegerField(blank=True, null=True) 
+
     augury_job_id = models.IntegerField(blank=True, null=True)
 
     ip_addr = models.CharField(max_length=1040, blank=True, validators=[validate_ips])
@@ -53,9 +55,9 @@ class Results(models.Model):
 
     query_job = models.ForeignKey(QueryJob, related_name='results', on_delete=models.CASCADE)
 
-    augury_job_id = models.IntegerField(blank=True, null=True)
+    aug_job_id = models.IntegerField(blank=True, null=True)
 
-    augury_response = models.TextField(blank=True)
+    aug_results = models.TextField(blank=True)
 
     def __str__(self):
         return self.augury_response    

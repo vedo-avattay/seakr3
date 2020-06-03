@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Query, QueryJob, IP
+from .models import Query, QueryJob, IP, Results
 
 class QuerySerializer(serializers.ModelSerializer):
 
@@ -17,7 +17,7 @@ class QueryJobSerializer(serializers.ModelSerializer):
 
         model = QueryJob
 
-        fields = ['id', 'name', 'ip_addr', 'ptr', 'description', 'seaker_status', 'external_status', 'start_date', 'end_date', 'associated_user', 'queries']
+        fields = ['id', 'name', 'ip_addr', 'ptr', 'description', 'seaker_status', 'external_status', 'results_id', 'start_date', 'end_date', 'associated_user', 'queries']
 
 
     def create(self, validated_data):
@@ -35,3 +35,11 @@ class QueryJobSerializer(serializers.ModelSerializer):
         instance.save()        
 
         return instance
+
+class ResultsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = Results
+
+        fields = ['id', 'aug_results']

@@ -181,12 +181,24 @@ def get_augury_job_results(active_job_status):
             print(results)
             try:
                 with connection.cursor() as cursor:
-                    insert_statement = "insert into `API_results` (`augury_response`,`query_job_id`,`augury_job_id`) VALUES (%s, %s, %s)"
+                    insert_statement = "insert into `API_results` (`aug_results`,`query_job_id`,`aug_job_id`) VALUES (%s, %s, %s)"
                     cursor.execute(insert_statement, (results, queryjob_id, augury_job_id))
                     connection.commit()
             except pymysql.Error as e:
                 print("set_job_status: failed to save augury results")
                 print("Error %d: %s" % (e.args[0], e.args[1]))
+
+            # Now update the job with the results_id
+            results_id = cursor.lastrowid
+            try:
+                with connection.cursor() as cursor:
+                    insert_statement = "update `API_queryjob` set `results_id`=%s where id=%s"
+                    cursor.execute(insert_statement, (results_id, queryjob_id))
+                    connection.commit()
+            except pymysql.Error as e:
+                print("set_job_status: failed to save augury results")
+                print("Error %d: %s" % (e.args[0], e.args[1]))
+
 
 
             # Each line in the response is a json string.. ugh.
@@ -195,7 +207,7 @@ def get_augury_job_results(active_job_status):
 #            for r in results_list:
 #                try:
 #                    with connection.cursor() as cursor:
-#                        insert_statement = "insert into `API_results` (`augury_response`,`query_job_id`) VALUES (%s, %s)"
+#                        insert_statement = "insert into `API_results` (`aug_results`,`query_job_id`) VALUES (%s, %s)"
 #                        cursor.execute(insert_statement, (r, queryjob_id))
 #                        connection.commit()
 #                except pymysql.Error as e:

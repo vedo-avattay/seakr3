@@ -1,11 +1,11 @@
 from django.shortcuts import render, HttpResponse, get_object_or_404, HttpResponseRedirect, redirect
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
-from API.models import Query, QueryJob
+from API.models import Query, QueryJob, Results
 from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
-from .serializers import QueryJobSerializer, QuerySerializer
+from .serializers import QueryJobSerializer, QuerySerializer, ResultsSerializer
 import logging
 
 # Create your views here.
@@ -150,3 +150,23 @@ def api_job_details(request, pk):
         query.delete()
 
         return HttpResponse(status=200)
+
+
+def api_job_results(request, pk):
+
+    try:
+        query = Results.objects.get(pk=pk)
+
+    except Exception as e:
+
+        print(e)
+
+        return HttpResponse('Wrong id, please check your query ids and try again', status=404)
+
+    if request.method == 'GET':
+
+        serializer = ResultsSerializer(query)
+
+        return JsonResponse(serializer.data, status=200)
+
+    

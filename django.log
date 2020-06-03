@@ -3320,3 +3320,46 @@ Forbidden (CSRF cookie not set.): /accounts/login/
 "POST /api/jobs HTTP/1.1" 401 27
 "POST /api/jobs HTTP/1.1" 400 256
 "GET /api/jobs1 HTTP/1.1" 404 3712
+"GET /api/jobs/results/98 HTTP/1.1" 404 51
+Internal Server Error: /api/jobs/results/98
+Traceback (most recent call last):
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ctrust/seaker3/API/views.py", line 168, in api_job_results
+    serializer = ResultsSerializer(query)
+NameError: name 'ResultsSerializer' is not defined
+"GET /api/jobs/results/98 HTTP/1.1" 500 65233
+Internal Server Error: /api/jobs/results/98
+Traceback (most recent call last):
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ctrust/seaker3/API/views.py", line 170, in api_job_results
+    return JsonResponse(serializer.data, status=200)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/serializers.py", line 562, in data
+    ret = super().data
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/serializers.py", line 260, in data
+    self._data = self.to_representation(self.instance)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/serializers.py", line 514, in to_representation
+    for field in fields:
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/serializers.py", line 375, in _readable_fields
+    for field in self.fields.values():
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/django/utils/functional.py", line 48, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/serializers.py", line 363, in fields
+    for key, value in self.get_fields().items():
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/serializers.py", line 1063, in get_fields
+    source, info, model, depth
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/serializers.py", line 1208, in build_field
+    return self.build_unknown_field(field_name, model_class)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/serializers.py", line 1325, in build_unknown_field
+    (field_name, model_class.__name__)
+django.core.exceptions.ImproperlyConfigured: Field name `aug_results` is not valid for model `Results`.
+"GET /api/jobs/results/98 HTTP/1.1" 500 106846
