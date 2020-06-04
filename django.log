@@ -3363,3 +3363,93 @@ Traceback (most recent call last):
     (field_name, model_class.__name__)
 django.core.exceptions.ImproperlyConfigured: Field name `aug_results` is not valid for model `Results`.
 "GET /api/jobs/results/98 HTTP/1.1" 500 106846
+Internal Server Error: /api/jobs
+Traceback (most recent call last):
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/django/views/generic/base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+  File "/home/ctrust/seaker3/API/views.py", line 23, in api_jobs_list
+    return JsonResponse(job_serializer.data, safe = False)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/serializers.py", line 760, in data
+    ret = super().data
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/serializers.py", line 260, in data
+    self._data = self.to_representation(self.instance)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/serializers.py", line 678, in to_representation
+    self.child.to_representation(item) for item in iterable
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/serializers.py", line 678, in <listcomp>
+    self.child.to_representation(item) for item in iterable
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/serializers.py", line 514, in to_representation
+    for field in fields:
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/serializers.py", line 375, in _readable_fields
+    for field in self.fields.values():
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/django/utils/functional.py", line 48, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/serializers.py", line 363, in fields
+    for key, value in self.get_fields().items():
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/serializers.py", line 1020, in get_fields
+    serializer_class=self.__class__.__name__
+AssertionError: Class QueryJobSerializer missing "Meta.model" attribute
+"GET /api/jobs HTTP/1.1" 500 17374
+Internal Server Error: /api/jobs
+Traceback (most recent call last):
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/django/views/generic/base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+  File "/home/ctrust/seaker3/API/views.py", line 23, in api_jobs_list
+    return JsonResponse(job_serializer.data, safe = False)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/serializers.py", line 760, in data
+    ret = super().data
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/serializers.py", line 260, in data
+    self._data = self.to_representation(self.instance)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/serializers.py", line 678, in to_representation
+    self.child.to_representation(item) for item in iterable
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/serializers.py", line 678, in <listcomp>
+    self.child.to_representation(item) for item in iterable
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/serializers.py", line 514, in to_representation
+    for field in fields:
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/serializers.py", line 375, in _readable_fields
+    for field in self.fields.values():
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/django/utils/functional.py", line 48, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/serializers.py", line 363, in fields
+    for key, value in self.get_fields().items():
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/serializers.py", line 1038, in get_fields
+    field_names = self.get_field_names(declared_fields, info)
+  File "/home/ctrust/seaker3_env/lib64/python3.6/site-packages/rest_framework/serializers.py", line 1139, in get_field_names
+    serializer_class=self.__class__.__name__
+AssertionError: The field 'queries' was declared on serializer QueryJobSerializer, but has not been included in the 'fields' option.
+"GET /api/jobs HTTP/1.1" 500 17683

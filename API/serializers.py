@@ -11,13 +11,15 @@ class QuerySerializer(serializers.ModelSerializer):
 
 class QueryJobSerializer(serializers.ModelSerializer):
 
-    queries = QuerySerializer(many=True, required=False)
+    # SHC: for now, lets not show them the queries
+    # queries = QuerySerializer(many=True, required=False)
 
     class Meta:
 
+	# SHC: for now, lets not show them the queries
+        #fields = ['id', 'name', 'ip_addr', 'ptr', 'description', 'seaker_status', 'external_status', 'results_id', 'start_date', 'end_date', 'associated_user', 'queries']
         model = QueryJob
-
-        fields = ['id', 'name', 'ip_addr', 'ptr', 'description', 'seaker_status', 'external_status', 'results_id', 'start_date', 'end_date', 'associated_user', 'queries']
+        fields = ['id', 'name', 'ip_addr', 'ptr', 'description', 'seaker_status', 'external_status', 'results_id', 'start_date', 'end_date', 'associated_user']
 
 
     def create(self, validated_data):
