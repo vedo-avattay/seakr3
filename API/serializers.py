@@ -10,6 +10,7 @@ class QuerySerializer(serializers.ModelSerializer):
         fields = ['query_type', 'any_ip_addr']
 
 class QueryJobSerializer(serializers.ModelSerializer):
+    # used by api_job_details view
 
     # SHC: for now, lets not show them the queries
     # queries = QuerySerializer(many=True, required=False)

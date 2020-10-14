@@ -54,6 +54,7 @@ import requests
 import pymysql
 import json
 import datetime
+import logging, platform
 
 # global variables
 augury_get_jobs_url = "https://augury5.heliumrain.com/api/jobs"
@@ -66,14 +67,21 @@ augury_api_headers = {
 connection = pymysql.connect("localhost", "root", "DEXTER!dexter1", "seaker")
 # connection = pymysql.connect("localhost","root","DEXTER!dexter1","seaker",cursorclass=pymysql.cursors.DictCursor)
 
+# Get hostname class for injecting into the logs
+class HostnameFilter(logging.Filter):
+    hostname = platform.node()
+    def filter(self, record):
+        record.hostname = HostnameFilter.hostname
+        return True
+
 def get_queryjob_id(augury_job_id):
     try:
         with connection.cursor() as cursor:
             cursor.execute("select id from API_queryjob where augury_job_id = " + str(augury_job_id))
             queryjob_id = cursor.fetchone()
     except pymysql.Error as e:
-        print("failed to fetch queryjob_id")
-        print("Error %d: %s" % (e.args[0], e.args[1]))
+        logger.error("failed to fetch queryjob_id")
+        logger.error("Error %d: %s" % (e.args[0], e.args[1]))
     return queryjob_id 
 
 
@@ -88,8 +96,8 @@ def get_active_jobs():
                 "select augury_job_id from API_queryjob where external_status = 'Submitted' OR external_status = 'In Progress'")
             active_jobs = cursor.fetchall()
     except pymysql.Error as e:
-        print("failed to read submitted jobs from db")
-        print("Error %d: %s" % (e.args[0], e.args[1]))
+        logger.error("failed to read submitted jobs from db")
+        logger.error("Error %d: %s" % (e.args[0], e.args[1]))
     return active_jobs
 
 
@@ -99,6 +107,7 @@ def get_active_jobs():
 # Returns:
 #	dictionary with augury_job_id:status key/value pairs
 def get_augury_job_status(active_jobs):
+    logger.info("In get_augury_job_status to check these jobs: "+str(active_jobs))
     payload = ""
     job_status = {}
     for job in active_jobs:
@@ -135,8 +144,8 @@ def set_seaker_status(queryjob_id, status):
             cursor.execute('update API_queryjob set `seaker_status`=%s where `id`=%s', (status, queryjob_id))
             connection.commit()
     except pymysql.Error as e:
-        print("set_job_status: failed to set seaker_status")
-        print("Error %d: %s" % (e.args[0], e.args[1]))
+        logger.error("set_job_status: failed to set seaker_status")
+        logger.error("Error %d: %s" % (e.args[0], e.args[1]))
     return
 
 def set_external_status(queryjob_id, status):
@@ -145,8 +154,8 @@ def set_external_status(queryjob_id, status):
             cursor.execute('update API_queryjob set `external_status`=%s where `id`=%s', (status, queryjob_id))
             connection.commit()
     except pymysql.Error as e:
-        print("set_job_status: failed to set external_status")
-        print("Error %d: %s" % (e.args[0], e.args[1]))
+        logger.error("set_job_status: failed to set external_status")
+        logger.error("Error %d: %s" % (e.args[0], e.args[1]))
     return
 
 def set_augury_job_id(queryjob_id, augury_job_id):
@@ -155,8 +164,8 @@ def set_augury_job_id(queryjob_id, augury_job_id):
             cursor.execute('update API_queryjob set `augury_job_id`=%s where `id`=%s', (augury_job_id, queryjob_id))
             connection.commit()
     except pymysql.Error as e:
-        print("set_augury_job_id: failed to set job augury_job_id")
-        print("Error %d: %s" % (e.args[0], e.args[1]))
+        logger.error("set_augury_job_id: failed to set job augury_job_id")
+        logger.error("Error %d: %s" % (e.args[0], e.args[1]))
     return
 
 
@@ -166,27 +175,29 @@ def set_augury_job_id(queryjob_id, augury_job_id):
 #	active_job_status: dictionary with augury_job_id:augury_job_status key/value pairs
 def get_augury_job_results(active_job_status):
 
-    print('In get_augury_job_results')
+    logger.info("In get_augury_job_results")
 
     for augury_job_id, augury_job_status in active_job_status.items():
 
         if augury_job_status == "Completed":
+            logger.info("Completed job found.  Getting results now")
 
             queryjob_id = get_queryjob_id(augury_job_id)
             get_augury_job_results_url = "https://augury5.heliumrain.com/api/jobs/" + str(augury_job_id) + "?format=json"
             payload = ""
-            print('Getting augury results')
             response = requests.request("GET", get_augury_job_results_url, data=payload, headers=augury_api_headers)
             results = response.text
-            print(results)
+            logger.info(results)
+
+            # Insert the raw response/results into 1 row of the API_results table
             try:
                 with connection.cursor() as cursor:
                     insert_statement = "insert into `API_results` (`aug_results`,`query_job_id`,`aug_job_id`) VALUES (%s, %s, %s)"
                     cursor.execute(insert_statement, (results, queryjob_id, augury_job_id))
                     connection.commit()
             except pymysql.Error as e:
-                print("set_job_status: failed to save augury results")
-                print("Error %d: %s" % (e.args[0], e.args[1]))
+                logger.error("set_job_status: failed to save augury results")
+                logger.error("Error %d: %s" % (e.args[0], e.args[1]))
 
             # Now update the job with the results_id
             results_id = cursor.lastrowid
@@ -196,8 +207,8 @@ def get_augury_job_results(active_job_status):
                     cursor.execute(insert_statement, (results_id, queryjob_id))
                     connection.commit()
             except pymysql.Error as e:
-                print("set_job_status: failed to save augury results")
-                print("Error %d: %s" % (e.args[0], e.args[1]))
+                logger.error("set_job_status: failed to save augury results")
+                logger.error("Error %d: %s" % (e.args[0], e.args[1]))
 
 
 
@@ -214,38 +225,39 @@ def get_augury_job_results(active_job_status):
 #                    print("set_job_status: failed to save augury results")
 #                    print("Error %d: %s" % (e.args[0], e.args[1]))
                 
-#### If we want to store each line in the results in a different row, in individual fields in the table, do something like this
+            # Store each line in the results in a different row, so we can do queries and stuff :)
+            results_list = results.splitlines()
+            for r in results_list:
 
-#                result_dict = json.loads(r)
-#                print(result_dict)
+               result_dict = json.loads(r)
+               print(result_dict)
 
                 # DATA CLEANUP BEFORE SAVING
                 # change "class" to "class_name"
-#               if 'class' in result_dict.keys():
-#                   result_dict['class_name'] = result_dict['class']
-#                   result_dict.pop("class")
+               if 'class' in result_dict.keys():
+                   result_dict['class_name'] = result_dict['class']
+                   result_dict.pop("class")
 
                 # For banners, the data key is a json object
-#               if result_dict['query_type'] == "banners" and result_dict['results'] != None:
-#                   print('Cleaning up banners data to not use mysql reserved words as column names')
-#                   result_dict['banners_ssl'] = result_dict['ssl']
-#                   result_dict.pop("ssl")
+               if result_dict['query_type'] == "banners" and result_dict['results'] != None:
+                   print('Cleaning up banners data to not use mysql reserved words as column names')
+                   result_dict['banners_ssl'] = result_dict['ssl']
+                   result_dict.pop("ssl")
 
                 # SAVE TO DATABASE
-#                try:
-#                    with connection.cursor() as cursor:
-                        # TODO: put the real job_id in here!
-#                        result_dict['job_id'] = "1"
-#                        result_dict['augury_job_id'] = augury_job_id
-#                        placeholder = ", ".join(["%s"] * len(result_dict))
-#                        stmt = "INSERT INTO `{table}` ({columns}) VALUES ({values});".format(
-#                            table="seakerUI_auguryresults", \
-#                            columns=",".join(result_dict.keys()), values=placeholder)
-#                        cursor.execute(stmt, list(result_dict.values()))
-#                    connection.commit()
-#                except pymysql.Error as e:
-#                    print("failed to save to db")
-#                    print("Error %d: %s" % (e.args[0], e.args[1]))
+               try:
+                   with connection.cursor() as cursor:
+                       result_dict['query_job_id'] = queryjob_id
+                       result_dict['aug_job_id'] = augury_job_id
+                       placeholder = ", ".join(["%s"] * len(result_dict))
+                       stmt = "INSERT INTO `{table}` ({columns}) VALUES ({values});".format(
+                           table="API_resultsparsed", \
+                           columns=",".join(result_dict.keys()), values=placeholder)
+                       cursor.execute(stmt, list(result_dict.values()))
+                   connection.commit()
+               except pymysql.Error as e:
+                   logger.error("Failed to save parsed results to database")
+                   logger.error("Error %d: %s" % (e.args[0], e.args[1]))
 
             set_seaker_status(augury_job_id, "Completed")
     return
@@ -258,8 +270,8 @@ def get_new_jobs():
             cursor.execute("select id,name,DATE_FORMAT(start_date,'%m/%d/%Y %T'), DATE_FORMAT(end_date,'%m/%d/%Y %T'),ip_addr from API_queryjob where seaker_status = 'Pending'")
             new_jobs = cursor.fetchall()
     except pymysql.Error as e:
-        print("get_new_jobs: failed to read new jobs from db")
-        print("Error %d: %s" % (e.args[0], e.args[1]))
+        logger.error("get_new_jobs: failed to read new jobs from db")
+        logger.error("Error %d: %s" % (e.args[0], e.args[1]))
     return new_jobs
 
 
@@ -288,6 +300,7 @@ def create_augury_job(new_job):
             }
         ]
     }
+    logger.info("Submitting new job to Augury with request payload: "+str(payload))
 
     # Submit the job to augury 
     augury_api_headers = {
@@ -296,6 +309,7 @@ def create_augury_job(new_job):
     }
     response = requests.post(create_augury_job_url, data=json.dumps(payload), headers=augury_api_headers)
     response_json = response.json()
+    logger.debug(response_json)
     augury_job_id = response_json["job"]["id"]
 
     # Save the augury_job_id locally
@@ -309,13 +323,22 @@ def create_augury_job(new_job):
 
     return
 
+if __name__ == "__main__":
+    # Set up logging
+    handler = logging.FileHandler('./seaker-queryrunner.log')
+    handler.addFilter(HostnameFilter())
+    handler.setFormatter(logging.Formatter('%(asctime)s %(hostname)s - %(levelname)s: %(message)s'))
 
-def main():
+    logger = logging.getLogger()
+    logger.addHandler(handler)
+    logger.setLevel(logging.DEBUG)
 
     # Get jobs that have been submitted to Augury (Status of "Submitted" or "In Progress" only)
     active_jobs = get_active_jobs()
 
     if len(active_jobs) > 0:
+
+        logger.info("Found some active jobs.")
         # Get current status of all active jobs from Augury
         active_jobs_status = get_augury_job_status(active_jobs)
         # Save the status locally
@@ -335,16 +358,12 @@ def main():
         for new_job in new_jobs:
             create_augury_job(new_job)
     else:
-        print('There were no new jobs to submit')
+        logger.info("There were no new jobs to submit")
 
     # Disconnect from database
     connection.close()
-    return
 
 
 def seaker_set_augury_job_id(augury_job_id):
     return
 
-
-if __name__ == "__main__":
-    main()
